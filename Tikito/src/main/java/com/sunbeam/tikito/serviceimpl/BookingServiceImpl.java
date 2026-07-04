@@ -5,23 +5,22 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
 import com.sunbeam.tikito.daos.BookedSeatsDao;
 import com.sunbeam.tikito.daos.BookingDao;
 import com.sunbeam.tikito.daos.SeatDao;
 import com.sunbeam.tikito.daos.ShowDao;
 import com.sunbeam.tikito.daos.UserDao;
+import com.sunbeam.tikito.daos.VenueDao;
 import com.sunbeam.tikito.dto.AllBookingsDto;
-import com.sunbeam.tikito.dto.BookedSeatDto;
 import com.sunbeam.tikito.dto.CancelTicketDto;
 import com.sunbeam.tikito.dto.TicketBookedDto;
 import com.sunbeam.tikito.dto.TicketBookingDto;
 import com.sunbeam.tikito.dto.UserBookingDto;
 import com.sunbeam.tikito.entity.UserEntity;
+import com.sunbeam.tikito.entity.VenueEntity;
 import com.sunbeam.tikito.enums.BookingStatus;
 import com.sunbeam.tikito.enums.PaymentStatus;
 import com.sunbeam.tikito.exceptions.InvalidBookingException;
@@ -45,8 +44,9 @@ public class BookingServiceImpl implements BookingService
 	private BookedSeatsDao bookedSeatDao;
 	private BookingDao bookingDao;
 	private ModelMapper mapper;
+	private VenueDao venueDao;
 	
-	public BookingServiceImpl(UserDao userDao, ShowDao showDao, SeatDao seatDao, BookedSeatsDao bookedSeatDao, BookingDao bookingDao, ModelMapper mapper)
+	public BookingServiceImpl(UserDao userDao, ShowDao showDao, SeatDao seatDao, BookedSeatsDao bookedSeatDao, BookingDao bookingDao, ModelMapper mapper, VenueDao venueDao)
 	{
 		this.userDao = userDao;
 		this.showDao = showDao;
@@ -54,6 +54,7 @@ public class BookingServiceImpl implements BookingService
 		this.bookedSeatDao = bookedSeatDao;
 		this.bookingDao = bookingDao;
 		this.mapper = mapper;
+		this.venueDao = venueDao;
 	}
 
 	@Override
@@ -310,9 +311,35 @@ public class BookingServiceImpl implements BookingService
 		return dtos;
 	}
 
-//	@Override
-//	public List<String> getAllAvailableSeats(long showId) 
-//	{
-//		ShowEntity show = 
-//	}
+	@Override
+	public int getAllAvailableSeats(long showId, long venueId, long bookingId) 
+	{
+		int count = 0;
+		Optional<VenueEntity> optionalVenue = venueDao.findById(venueId);
+		if(!optionalVenue.isPresent())
+		{
+			throw new RuntimeException("Invalid venue");
+		}
+		else
+		{
+			VenueEntity venue = optionalVenue.get();
+			List<SeatEntity> seats = venue.getSeatList();
+			int totalSeats = seats.size();
+			
+			Optional<BookingEntity> optionalBooking = bookingDao.findById(bookingId);
+			if(!optionalBooking.isPresent())
+			{
+				throw new InvalidBookingException("Booking does not exception");
+			}
+			else
+			{
+				BookingEntity booking = optionalBooking.get();
+				List<BookedSeatsEntity> bookedSeats = booking.getBookedSeats();
+				int totalBookedSeats = bookedSeats.size();
+				count = totalSeats - totalBookedSeats;
+			}
+		}
+		
+		return count;
+	}
 }

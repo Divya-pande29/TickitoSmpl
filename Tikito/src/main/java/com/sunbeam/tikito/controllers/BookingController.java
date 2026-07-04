@@ -20,6 +20,8 @@ import com.sunbeam.tikito.dto.UserBookingDto;
 import com.sunbeam.tikito.serviceimpl.BookingServiceImpl;
 import com.sunbeam.tikito.utils.Resp;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/tikito/api/booking")
 public class BookingController 
@@ -28,7 +30,7 @@ public class BookingController
 	private BookingServiceImpl ser;
 	
 	@PostMapping
-	public Resp<?> bookTicket(@RequestBody TicketBookingDto dto)
+	public Resp<?> bookTicket(@Valid @RequestBody TicketBookingDto dto)
 	{
 		TicketBookedDto ticket = ser.bookTicket(dto);
 		return Resp.success(ticket);
@@ -60,5 +62,12 @@ public class BookingController
 	{
 		List<AllBookingsDto> allBookings = ser.getAllBookingsByShow(showId);
 		return Resp.success(allBookings);
+	}
+	
+	@GetMapping("/getAvailableSeats")
+	public Resp<?> getAllAvailableSeats(@RequestParam long venueId, @RequestParam long showId, @RequestParam long bookingId)
+	{
+		int countAvailableSeats = ser.getAllAvailableSeats(showId, venueId, bookingId);
+		return Resp.success(countAvailableSeats);
 	}
 }
