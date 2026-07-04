@@ -15,5 +15,5 @@ public interface BookingService
 	UserBookingDto getBookingsByUser(long bookingId, long userId);
 	List<UserBookingDto> getAllBookingsByUser(long userId);
 	List<AllBookingsDto> getAllBookingsByShow(long showId);
-//	List<String> getAllAvailableSeats(long showId);
+	int getAllAvailableSeats(long showId, long venueId, long bookingId);
 }
