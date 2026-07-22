@@ -12,7 +12,7 @@ package com.sunbeam.tikito.controllers;
 import com.sunbeam.tikito.serviceimpl.UserServiceImpl;
 import com.sunbeam.tikito.utils.Resp;
 
-//		@RequestMapping("/users")
+		@RequestMapping("/users")
 		@RestController
 		public class UserController {
 

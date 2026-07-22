@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,10 +37,6 @@ public class ShowEntity {
 
 	@Column(name="show_language")
 	private String language;
-	
-	
-	@Column(name="price")
-	private Double price;
 
 	@Column(name = "is_eighteen_plus")
 	private boolean isEighteenPlus;
@@ -54,10 +52,12 @@ public class ShowEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "venue_id")
+	@JsonIgnore
 	private VenueEntity venue;
 
 	@ManyToOne
 	@JoinColumn(name = "event_id")
+	@JsonIgnore
 	private EventEntity event ;
 
 	@Column(name = "created_at")
@@ -65,6 +65,9 @@ public class ShowEntity {
 
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
+	
+	@Column(name = "price", nullable=false)
+	private Double price;
 
 	@PrePersist
 	public void onCreate() {
