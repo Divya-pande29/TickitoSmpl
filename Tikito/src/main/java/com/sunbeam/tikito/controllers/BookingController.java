@@ -50,7 +50,7 @@ public class BookingController
 		return Resp.success(userDetails);
 	}
 	
-	@GetMapping("/getAllBookings/{userId}")
+	@GetMapping("/getAllBookings/{userId}") //My tickets in ui
 	public Resp<?> getAllBookingsByUser(@PathVariable long userId)
 	{
 		List<UserBookingDto> userDetailsList = ser.getAllBookingsByUser(userId);
