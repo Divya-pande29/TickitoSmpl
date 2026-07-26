@@ -3,6 +3,8 @@ package com.sunbeam.tikito.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,11 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sunbeam.tikito.dto.AllBookingsDto;
+import com.sunbeam.tikito.dto.AvailableSeatsDto;
 import com.sunbeam.tikito.dto.CancelTicketDto;
 import com.sunbeam.tikito.dto.TicketBookedDto;
 import com.sunbeam.tikito.dto.TicketBookingDto;
 import com.sunbeam.tikito.dto.UserBookingDto;
+import com.sunbeam.tikito.entity.SeatEntity;
+import com.sunbeam.tikito.entity.UserEntity;
 import com.sunbeam.tikito.serviceimpl.BookingServiceImpl;
+import com.sunbeam.tikito.services.BookingService;
 import com.sunbeam.tikito.utils.Resp;
 
 import jakarta.validation.Valid;
@@ -27,37 +33,38 @@ import jakarta.validation.Valid;
 public class BookingController 
 {
 	@Autowired
-	private BookingServiceImpl ser;
+	private BookingService ser;
 	
 	@PostMapping
-	public Resp<?> bookTicket(@Valid @RequestBody TicketBookingDto dto)
+	public Resp<?> bookTicket(@Valid @RequestBody TicketBookingDto dto, @AuthenticationPrincipal UserEntity loggedInUser)
 	{
-		TicketBookedDto ticket = ser.bookTicket(dto);
+		TicketBookedDto ticket = ser.bookTicket(dto, loggedInUser.getUserId());
 		return Resp.success(ticket);
 	}
 	
 	@PatchMapping("/cancel/{bookingId}")
-	public Resp<?> cancelTicket(@PathVariable long bookingId, @RequestParam long userId)
+	public Resp<?> cancelTicket(@PathVariable long bookingId, @AuthenticationPrincipal UserEntity loggedInUser)
 	{
-		CancelTicketDto cancelledTicket = ser.cancelTicket(bookingId, userId);
+		CancelTicketDto cancelledTicket = ser.cancelTicket(bookingId, loggedInUser.getUserId());
 		return Resp.success(cancelledTicket);
 	}
 	
-	@GetMapping("/getByUser/{bookingId}")
-	public Resp<?> getBookingsByUser(@PathVariable long bookingId, @RequestParam long userId)
+	@GetMapping("/mybooking/{bookingId}")//returns single booking
+	public Resp<?> getBookingsByUser(@PathVariable long bookingId, @AuthenticationPrincipal UserEntity loggedInUser)
 	{
-		UserBookingDto userDetails = ser.getBookingsByUser(bookingId, userId);
+		UserBookingDto userDetails = ser.getBookingsByUser(bookingId, loggedInUser.getUserId());
 		return Resp.success(userDetails);
 	}
 	
-	@GetMapping("/getAllBookings/{userId}") //My tickets in ui
-	public Resp<?> getAllBookingsByUser(@PathVariable long userId)
+	@GetMapping("/getMyBookings") //My tickets in ui //returns all booking of a user
+	public Resp<?> getAllBookingsByUser( @AuthenticationPrincipal UserEntity loggedInUser)
 	{
-		List<UserBookingDto> userDetailsList = ser.getAllBookingsByUser(userId);
+		List<UserBookingDto> userDetailsList = ser.getAllBookingsByUser(loggedInUser.getUserId());
 		return Resp.success(userDetailsList);
 	}
 	
 	@GetMapping("/getByShowId/{showId}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public Resp<?> getAllBookingByShow(@PathVariable long showId)
 	{
 		List<AllBookingsDto> allBookings = ser.getAllBookingsByShow(showId);
@@ -65,9 +72,10 @@ public class BookingController
 	}
 	
 	@GetMapping("/getAvailableSeats")
-	public Resp<?> getAllAvailableSeats(@RequestParam long venueId, @RequestParam long showId, @RequestParam long bookingId)
+	@PreAuthorize("hasRole('ADMIN')")
+	public Resp<?> getAllAvailableSeats(@RequestParam long showId)
 	{
-		int countAvailableSeats = ser.getAllAvailableSeats(showId, venueId, bookingId);
-		return Resp.success(countAvailableSeats);
+		List<AvailableSeatsDto> availableSeats = ser.getAllAvailableSeats(showId);
+		return Resp.success(availableSeats);
 	}
 }
