@@ -18,83 +18,76 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 
 @Component
-public class JwtUtil {
-
-    @Value("${jwt.secret}")
-    private String jwtSecret;
-
-    @Value("${jwt.expiration}")
-    private long jwtExpiration;
-
-    private SecretKey key;
-
-    @PostConstruct
-    public void init() {
-        key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-    }
-    
-    // Generate JWT
-    @SuppressWarnings("deprecation")
-	public String createToken(Authentication authentication) {
-
-        UserEntity user = (UserEntity) authentication.getPrincipal();
-
-        return Jwts.builder()
-                .setSubject(user.getEmail())                // Email as subject
-                .claim("role", user.getRole())              // ROLE_USER / ROLE_ADMIN
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    // Extract all claims
-    private Claims extractClaims(String token) {
-
-    	return Jwts.parser()
-                .verifyWith((SecretKey) key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    }
-
-    // Extract email
-    public String extractUsername(String token) {
-
-        return extractClaims(token).getSubject();
-    }
-
-    // Extract expiry
-    public Date extractExpiration(String token) {
-
-        return extractClaims(token).getExpiration();
-    }
-
-    // Check if expired
-    private boolean isTokenExpired(String token) {
-
-        return extractExpiration(token).before(new Date());
-    }
-
-    // Validate token
-    public boolean validateToken(String token,
-                                 UserDetails userDetails) {
-
-        String username = extractUsername(token);
-
-        return username.equals(userDetails.getUsername())
-                && !isTokenExpired(token);
-    }
-
-    // Create Authentication object
-    public Authentication getAuthentication(
-            String token,
-            UserDetails userDetails) {
-
-        return new UsernamePasswordAuthenticationToken(
-                userDetails,
-                null,
-                userDetails.getAuthorities());
-    }
-
+public class JwtUtil
+{
+	@Value("${jwt.secret}")
+	private String jwtSecret;
+	
+	@Value("${jwt.expiration}")
+	private long jwtExpiry;
+	
+	private SecretKey key;
+	
+	@PostConstruct
+	public void init()
+	{
+		key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+	}
+	
+	//create the jwt token
+	public String createToken(Authentication authentication)
+	{
+		UserEntity user = (UserEntity) authentication.getPrincipal();
+		
+		String token = Jwts.builder()
+					   .subject(user.getEmail())
+					   .claim("role", user.getRole())
+					   .issuedAt(new Date())
+					   .expiration(new Date(System.currentTimeMillis() + jwtExpiry))
+					   .signWith(key)
+					   .compact();
+		
+		return token;
+	}
+	
+	//create claims - claims is data or payload stored in jwt token
+	private Claims extractClaims(String token)
+	{
+		Claims claims = Jwts.parser()
+						.verifyWith(key)
+						.build()
+						.parseSignedClaims(token)
+						.getPayload();
+		
+		return claims;
+	}
+	
+	//Here user name is email
+	public String extractUsername(String token)
+	{
+		//subject is email
+		String email = extractClaims(token).getSubject();
+		return email;
+	}
+	
+	//role tells whether user is admin or just a user 
+	public String getRole(String token)
+	{
+		String role = extractClaims(token).get("role", String.class);
+		return role;
+	}
+	
+	//token expiration date
+	public Date extractTokenExpiration(String token)
+	{
+		Date expiry = extractClaims(token).getExpiration();
+		return expiry;
+	}
+	
+	//Creating and returning obj of Authentiacation
+	public Authentication getAuthentication(String token, UserDetails details)
+	{
+		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(details, null, details.getAuthorities());
+		return auth;
+	}
 }
