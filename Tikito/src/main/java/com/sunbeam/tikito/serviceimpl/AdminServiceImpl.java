@@ -32,20 +32,20 @@ public class AdminServiceImpl implements AdminService{
 	    }
 		
 		
-	@Override
-	public UserDto loginAdmin(UserDto dto) {
-		UserEntity admin = userDao.findByEmail(dto.getEmail()).orElseThrow(() ->
-		new RuntimeException("Invalid Email"));
-
-        if(!admin.getPassword().equals(dto.getPassword()))
-            throw new RuntimeException("Invalid Password");
-
-        if(!admin.getRole().equals("Admin"))
-            throw new RuntimeException("Access Denied");
-
-        UserDto response =modelMapper.map(admin,UserDto.class);
-        response.setPassword(null);
-        return response;
-    }
+//	@Override
+//	public UserDto loginAdmin(UserDto dto) {
+//		UserEntity admin = userDao.findByEmail(dto.getEmail()).orElseThrow(() ->
+//		new RuntimeException("Invalid Email"));
+//
+//        if(!admin.getPassword().equals(dto.getPassword()))
+//            throw new RuntimeException("Invalid Password");
+//
+//        if(!admin.getRole().equals("Admin"))
+//            throw new RuntimeException("Access Denied");
+//
+//        UserDto response =modelMapper.map(admin,UserDto.class);
+//        response.setPassword(null);
+//        return response;
+//    }
 
 }

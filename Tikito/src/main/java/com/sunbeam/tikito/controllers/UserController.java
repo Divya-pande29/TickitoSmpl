@@ -29,12 +29,12 @@ import com.sunbeam.tikito.utils.Resp;
 		        return Resp.success(dto);
 		    }
 
-		    // Login
-		    @PostMapping("/login")
-		    public Resp<?> loginUser(@RequestBody UserDto dto) {
-		        dto = userService.login(dto);
-		        return Resp.success(dto);
-		    }
+//		    // Login
+//		    @PostMapping("/login")
+//		    public Resp<?> loginUser(@RequestBody UserDto dto) {
+//		        dto = userService.login(dto);
+//		        return Resp.success(dto);
+//		    }
 
 		    // Get Profile
 		    @GetMapping("/{userId}")

@@ -26,11 +26,11 @@ public class AdminController {
 	        return Resp.success(dto);
 	    }
 
-	    @PostMapping("/login")
-	    public Resp<?> loginAdmin(
-	            @RequestBody UserDto dto) {
-	        dto = adminService.loginAdmin(dto);
-	        return Resp.success(dto);
-	    }
+//	    @PostMapping("/login")
+//	    public Resp<?> loginAdmin(
+//	            @RequestBody UserDto dto) {
+//	        dto = adminService.loginAdmin(dto);
+//	        return Resp.success(dto);
+//	    }
 
 }
