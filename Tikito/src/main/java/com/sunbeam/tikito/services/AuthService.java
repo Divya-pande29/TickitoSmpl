@@ -5,5 +5,5 @@ import com.sunbeam.tikito.dto.AuthResponseDto;
 
 public interface AuthService
 {
-	AuthResponseDto authenticateUser(AuthRequestDto request);
+	AuthResponseDto login(AuthRequestDto request);
 }
