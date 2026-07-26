@@ -23,7 +23,7 @@ import com.sunbeam.tikito.utils.Resp;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/tikito/api/booking")
+@RequestMapping("/tikito/booking")
 public class BookingController 
 {
 	@Autowired
