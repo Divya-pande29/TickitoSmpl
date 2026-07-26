@@ -5,6 +5,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,7 @@ import com.sunbeam.tikito.daos.ShowDao;
 import com.sunbeam.tikito.daos.UserDao;
 import com.sunbeam.tikito.daos.VenueDao;
 import com.sunbeam.tikito.dto.AllBookingsDto;
+import com.sunbeam.tikito.dto.AvailableSeatsDto;
 import com.sunbeam.tikito.dto.CancelTicketDto;
 import com.sunbeam.tikito.dto.TicketBookedDto;
 import com.sunbeam.tikito.dto.TicketBookingDto;
@@ -58,89 +62,98 @@ public class BookingServiceImpl implements BookingService
 	}
 
 	@Override
-	public TicketBookedDto bookTicket(TicketBookingDto dto) 
+	public TicketBookedDto bookTicket(TicketBookingDto dto, long userId) 
 	{
 		TicketBookedDto ticket = new TicketBookedDto();
 		
-		Optional<UserEntity> userOptional = userDao.findById(dto.getUserId());
-		if(!userOptional.isPresent())
+		//get the user
+		UserEntity loggedInUser = userDao.findById(userId).orElseThrow(() -> new UserNotFoundException("User cannot be found"));
+		
+		//get the show for which user wants to book tickets for
+		ShowEntity show = showDao.findById(dto.getShowId()).orElseThrow(() -> new InvalidShowException("Show is not Available"));
+		
+		//get the venue from show to verify that belongs to venue
+		long venueId = show.getVenue().getVenueId();
+		
+		//check if showDate is valid before proceeding to book
+		if(isDateValid(show))
 		{
-			throw new UserNotFoundException("User cannot be found");
-		}
-		else
-		{
-			UserEntity user = userOptional.get();
-			Optional<ShowEntity> showOptional = showDao.findById(dto.getShowId());
-			if(!showOptional.isPresent())
+			//get the list of seasts from db and dto and make sure their size matches
+			//if the size matched then the seats are valid because all the requested seats were received
+			//if size is different that means some of requested seats were not returned because they didnt exist or are booked
+			List<SeatEntity> seats = seatDao.findBySeatIdIn(dto.getSeatIds());
+			if(seats.size() != dto.getSeatIds().size())
 			{
-				throw new InvalidShowException("Show is not Available");
+				throw new InvalidShowException("Seats are invalid");
 			}
 			else
 			{
-				ShowEntity show = showOptional.get();
-				long venueId = show.getVenue().getVenueId();
-				
-				if(isDateValid(show))
+				//now that we checked seats are valid, proceed to book
+				//firstly validate venue
+				for(SeatEntity s : seats)
 				{
-					List<SeatEntity> seats = seatDao.findBySeatIdIn(dto.getSeatIds());
-					if(seats.size() != dto.getSeatIds().size())
+					if(s.getVenue().getVenueId() != venueId)
 					{
-						throw new InvalidSeatsException("seats are invalid");
-					}
-					else
-					{
-						for(SeatEntity s : seats)
-						{
-							if(s.getVenue().getVenueId() != venueId)
-							{
-								throw new InvalidSeatsException("seats are invalid");
-							}
-						}
-						
-						List<BookedSeatsEntity> bookedSeats = bookedSeatDao.findByShowShowIdAndSeatSeatIdIn(dto.getShowId(), dto.getSeatIds());
-						if(!bookedSeats.isEmpty())
-						{
-							throw new InvalidSeatsException("seats are already booked");
-						}
-						
-						Double totalAmt = show.getPrice() * seats.size();
-						List<BookedSeatsEntity> newBookingSeats = new ArrayList<>();
-						
-	 					BookingEntity booking = new BookingEntity(null, user, show , new ArrayList<>(), totalAmt, PaymentStatus.PAID, BookingStatus.SUCCESS);
-						
-	 					for(SeatEntity s : seats)
-	 					{
-	 						BookedSeatsEntity bs = new BookedSeatsEntity(null, booking, s, show);
-	 						newBookingSeats.add(bs);
-	 					}
-	 					
-	 					try
-	 					{
-	 						booking.setBookedSeats(newBookingSeats);
-	 	 					BookingEntity newBooking = bookingDao.save(booking);
-	 	 					
-	 	 					List<String> seatNums = new ArrayList<>();
-	 	 					List<BookedSeatsEntity> newSeatsBooked = bookedSeatDao.saveAll(newBookingSeats);
-	 	 					
-	 	 					for(BookedSeatsEntity bs : newSeatsBooked)
-	 	 					{
-	 	 						seatNums.add(bs.getSeat().getSeatNo());
-	 	 					}
-	 	 					
-	 	 					ticket = new TicketBookedDto(newBooking.getBookingId(), show.getShowId(), seatNums, totalAmt, PaymentStatus.PAID, BookingStatus.SUCCESS);
-	 					}
-	 					catch(DataIntegrityViolationException e)
-	 					{
-	 						throw new InvalidSeatsException("seat are already booked");
-	 					}
+						throw new InvalidShowException("The seats are invalid");
 					}
 				}
-				else
+				
+				//seats and show belong to the given venue, now check if seats are actually booked or not
+				//fetch list of bookedSeats for given array of seat Ids, if list is empty, seats can booked else already booked
+				List<BookedSeatsEntity> bookedSeats = bookedSeatDao.findByShowShowIdAndSeatSeatIdIn(dto.getShowId(), dto.getSeatIds());
+				if(!bookedSeats.isEmpty())
 				{
-					throw new InvalidShowException("The show has already started");
+					throw new InvalidShowException("Seats are already booked");
 				}
 				
+				//if seats are not booked, proceed booking
+				//1. calculate price of tickets
+				Double totalAmt = show.getPrice() * seats.size();
+				List<BookedSeatsEntity> newBookingSeats = new ArrayList<>();
+				
+				//2. Create a booking Object 
+				BookingEntity booking = new BookingEntity(null, loggedInUser, show, new ArrayList<>(), totalAmt, PaymentStatus.PAID, BookingStatus.SUCCESS);
+				
+				//3. add newly booked seats to bookedSeats table
+				for(SeatEntity s : seats)
+				{
+					BookedSeatsEntity bs = new BookedSeatsEntity(null, booking, s, show);
+					newBookingSeats.add(bs);
+				}
+				
+				//4. make final booking
+				try
+				{
+					//add bookedSeats to booking object
+					booking.setBookedSeats(newBookingSeats);
+					
+					//finally save the booking object in the database
+					BookingEntity newBooking = bookingDao.save(booking);
+					
+					//create string array to fetch the seat nums
+					List<String> seatNums = new ArrayList<>();
+					
+					//finally save all bookedseats in databse
+					List<BookedSeatsEntity> newlyBookedSeats = bookedSeatDao.saveAll(newBookingSeats);
+					
+					//Loop through fetch seat nums and save it in seats nuims list
+					for(BookedSeatsEntity bs : newlyBookedSeats)
+					{
+						seatNums.add(bs.getSeat().getSeatNo());
+					}
+					
+					//initialize ticket and return 
+					ticket = new TicketBookedDto(newBooking.getBookingId(), show.getShowId(), seatNums, totalAmt, PaymentStatus.PAID, BookingStatus.SUCCESS);
+				}
+				catch(DataIntegrityViolationException e)
+				{
+					throw new InvalidSeatsException("Seats are already booked");
+				}
 			}
+		}
+		else
+		{
+			throw new InvalidShowException("The show has already, can't book now");
 		}
 		
 		return ticket;
@@ -150,43 +163,28 @@ public class BookingServiceImpl implements BookingService
 	public CancelTicketDto cancelTicket(long bookingId, long userId) 
 	{
 		CancelTicketDto cancelledTicket = new CancelTicketDto();
-		Optional<UserEntity> userOptional = userDao.findById(userId);
-		if(!userOptional.isPresent())
+		BookingEntity booking = bookingDao.findByBookingIdAndUserUserId(bookingId, userId).orElseThrow(() -> new InvalidBookingException("Booking unavailable"));
+		
+		if(booking.getBookingStatus().equals(BookingStatus.CANCELLED))
 		{
-			throw new UserNotFoundException("User cannot be found");
+			throw new InvalidBookingException("Ticket booking is already cancelled");
 		}
 		else
 		{
-			Optional<BookingEntity> optionalBooking = bookingDao.findByBookingIdAndUserUserId(bookingId, userId);
-			if(!optionalBooking.isPresent())
+			ShowEntity show = booking.getShow();
+			if(isDateValid(show))
 			{
-				throw new InvalidBookingException("Booking not found");
+				booking.setBookingStatus(BookingStatus.CANCELLED);
+				booking.setPaymentStatus(PaymentStatus.REFUNDED);
+				
+				bookingDao.save(booking);
+				bookedSeatDao.deleteByBookingBookingId(bookingId);
+				
+				cancelledTicket = new CancelTicketDto(bookingId, booking.getBookingStatus(), booking.getPaymentStatus());
 			}
 			else
 			{
-				BookingEntity booking = optionalBooking.get();
-				if(booking.getBookingStatus().equals(BookingStatus.CANCELLED))
-				{
-					throw new InvalidBookingException("Ticket booking is already cancelled");
-				}
-				else
-				{
-					ShowEntity show = booking.getShow();
-					if(isDateValid(show))
-					{
-						booking.setBookingStatus(BookingStatus.CANCELLED);
-						booking.setPaymentStatus(PaymentStatus.REFUNDED);
-						
-						bookingDao.save(booking);
-						bookedSeatDao.deleteByBookingBookingId(bookingId);
-						
-						cancelledTicket = new CancelTicketDto(bookingId, booking.getBookingStatus(), booking.getPaymentStatus());
-					}
-					else
-					{
-						throw new InvalidShowException("The show has already started");
-					}
-				}
+				throw new InvalidShowException("The show has already started");
 			}
 		}
 		
@@ -217,39 +215,23 @@ public class BookingServiceImpl implements BookingService
 	public UserBookingDto getBookingsByUser(long bookingId, long userId) 
 	{
 		UserBookingDto bookingDetails = new UserBookingDto();
-		Optional<UserEntity> optionalUser = userDao.findById(userId);
-		if(!optionalUser.isPresent())
+		BookingEntity booking = bookingDao.findByBookingIdAndUserUserId(bookingId, userId)
+			              				  .orElseThrow(() -> new InvalidBookingException("Booking unavailable"));
+		
+		List<String> seatNums = new ArrayList<>();
+		List<BookedSeatsEntity> seats = booking.getBookedSeats();
+		for(BookedSeatsEntity bs : seats)
 		{
-			throw new UserNotFoundException("User is not available");
+			seatNums.add(bs.getSeat().getSeatNo());
 		}
-		else
-		{
-			Optional<BookingEntity> optionalBooking = bookingDao.findByBookingIdAndUserUserId(bookingId, userId);
-			if(!optionalBooking.isPresent())
-			{
-				throw new InvalidBookingException("Booking unavailable");
-			}
-			else
-			{
-				BookingEntity booking = optionalBooking.get();
-				
-				List<String> seatNums = new ArrayList<>();
-				List<BookedSeatsEntity> seats = booking.getBookedSeats();
-				for(BookedSeatsEntity bs : seats)
-				{
-					seatNums.add(bs.getSeat().getSeatNo());
-				}
-				
-				bookingDetails = new UserBookingDto(booking.getBookingId(), 
-													booking.getShow().getShowId(), 
-													booking.getTotalAmt(), 
-													seatNums, 
-													booking.getPaymentStatus(), 
-													booking.getBookingStatus(), 
-													booking.getCreatedAt());
-				
-			}
-		}
+		
+		bookingDetails = new UserBookingDto(booking.getBookingId(), 
+											booking.getShow().getShowId(), 
+											booking.getTotalAmt(), 
+											seatNums, 
+											booking.getPaymentStatus(), 
+											booking.getBookingStatus(), 
+											booking.getCreatedAt());
 		
 		return bookingDetails;
 	}
@@ -259,42 +241,31 @@ public class BookingServiceImpl implements BookingService
 	{
 		UserBookingDto bookingDetails = new UserBookingDto();
 		List<UserBookingDto> bookingList = new ArrayList<>();
-		Optional<UserEntity> optionalUser = userDao.findById(userId);
-		if(!optionalUser.isPresent())
+		List<BookingEntity> bookings = bookingDao.findByUserUserId(userId);
+		
+		for(BookingEntity b : bookings)
 		{
-			throw new UserNotFoundException("User not found");
-		}
-		else
-		{
-			List<BookingEntity> bookings = bookingDao.findByUserUserId(userId);
-			if(!bookings.isEmpty())
+			List<String> seatNums = new ArrayList<>();
+			List<BookedSeatsEntity> seats = b.getBookedSeats();
+			for(BookedSeatsEntity bs : seats)
 			{
-				for(BookingEntity b : bookings)
-				{
-					List<String> seatNums = new ArrayList<>();
-					List<BookedSeatsEntity> seats = b.getBookedSeats();
-					for(BookedSeatsEntity bs : seats)
-					{
-						seatNums.add(bs.getSeat().getSeatNo());
-					}
-					
-					bookingDetails = new UserBookingDto(b.getBookingId(), 
-														b.getShow().getShowId(), 
-														b.getTotalAmt(), 
-														seatNums, 
-														b.getPaymentStatus(), 
-														b.getBookingStatus(), 
-														b.getCreatedAt());
-					
-					bookingList.add(bookingDetails);
-				}
+				seatNums.add(bs.getSeat().getSeatNo());
 			}
+			
+			bookingDetails = new UserBookingDto(b.getBookingId(), 
+												b.getShow().getShowId(), 
+												b.getTotalAmt(), 
+												seatNums, 
+												b.getPaymentStatus(), 
+												b.getBookingStatus(), 
+												b.getCreatedAt());
+			
+			bookingList.add(bookingDetails);
 		}
 		
 		return bookingList;
 	}
 
-	//work on this one for serialization issue
 	@Override
 	public List<AllBookingsDto> getAllBookingsByShow(long showId) 
 	{
@@ -312,34 +283,28 @@ public class BookingServiceImpl implements BookingService
 	}
 
 	@Override
-	public int getAllAvailableSeats(long showId, long venueId, long bookingId) 
+	public List<AvailableSeatsDto> getAllAvailableSeats(long showId) 
 	{
-		int count = 0;
-		Optional<VenueEntity> optionalVenue = venueDao.findById(venueId);
-		if(!optionalVenue.isPresent())
+		ShowEntity show = showDao.findById(showId).orElseThrow(() -> new InvalidShowException("Show is unavailable"));
+		VenueEntity venue = show.getVenue();
+		
+		List<SeatEntity> allSeats = venue.getSeatList();
+		List<BookedSeatsEntity> bookedSeats = bookedSeatDao.findByShowShowId(showId);
+		
+		Set<Long> bookedSeatIds = bookedSeats.stream()
+		        				  .map(bs -> bs.getSeat().getSeatId())
+		                          .collect(Collectors.toSet());
+		
+		List<SeatEntity> availableSeats = allSeats.stream()
+		                                  .filter(s -> !bookedSeatIds.contains(s.getSeatId())).toList();
+		
+		List<AvailableSeatsDto> dtos = new ArrayList<>();
+		for(SeatEntity s: availableSeats)
 		{
-			throw new RuntimeException("Invalid venue");
-		}
-		else
-		{
-			VenueEntity venue = optionalVenue.get();
-			List<SeatEntity> seats = venue.getSeatList();
-			int totalSeats = seats.size();
-			
-			Optional<BookingEntity> optionalBooking = bookingDao.findById(bookingId);
-			if(!optionalBooking.isPresent())
-			{
-				throw new InvalidBookingException("Booking does not exception");
-			}
-			else
-			{
-				BookingEntity booking = optionalBooking.get();
-				List<BookedSeatsEntity> bookedSeats = booking.getBookedSeats();
-				int totalBookedSeats = bookedSeats.size();
-				count = totalSeats - totalBookedSeats;
-			}
+			AvailableSeatsDto dto = new AvailableSeatsDto(s.getSeatId(), s.getSeatNo());
+			dtos.add(dto);
 		}
 		
-		return count;
+		return dtos;
 	}
 }

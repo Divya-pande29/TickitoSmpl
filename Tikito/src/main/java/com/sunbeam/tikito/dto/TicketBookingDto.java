@@ -16,8 +16,8 @@ import lombok.Setter;
 //request dto
 public class TicketBookingDto
 {
-	@NotNull(message = "UserId cannot be absent")
-	private Long userId;
+//	@NotNull(message = "UserId cannot be absent")
+//	private Long userId;
 	
 	@NotNull(message = "ShowId cannot be absent")
 	private Long showId;
