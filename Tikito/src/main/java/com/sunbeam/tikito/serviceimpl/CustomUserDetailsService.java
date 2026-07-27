@@ -1,5 +1,6 @@
 package com.sunbeam.tikito.serviceimpl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,7 +10,17 @@ import com.sunbeam.tikito.entity.UserEntity;
 
 public class CustomUserDetailsService implements UserDetailsService{
 
-	private UserDao userdao;
+	private final UserDao userdao;
+	
+	
+	
+	public CustomUserDetailsService(UserDao userdao) {
+		
+		this.userdao = userdao;
+	}
+
+
+
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		UserEntity user = userdao.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("user not found"));
