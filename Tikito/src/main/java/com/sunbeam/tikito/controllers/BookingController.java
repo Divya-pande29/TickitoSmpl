@@ -35,35 +35,35 @@ public class BookingController
 	@Autowired
 	private BookingService ser;
 	
-	@PostMapping
+	@PostMapping("/user")
 	public Resp<?> bookTicket(@Valid @RequestBody TicketBookingDto dto, @AuthenticationPrincipal UserEntity loggedInUser)
 	{
 		TicketBookedDto ticket = ser.bookTicket(dto, loggedInUser.getUserId());
 		return Resp.success(ticket);
 	}
 	
-	@PatchMapping("/cancel/{bookingId}")
+	@PatchMapping("/user/cancel/{bookingId}")
 	public Resp<?> cancelTicket(@PathVariable long bookingId, @AuthenticationPrincipal UserEntity loggedInUser)
 	{
 		CancelTicketDto cancelledTicket = ser.cancelTicket(bookingId, loggedInUser.getUserId());
 		return Resp.success(cancelledTicket);
 	}
 	
-	@GetMapping("/mybooking/{bookingId}")//returns single booking
+	@GetMapping("/user/mybooking/{bookingId}")//returns single booking
 	public Resp<?> getBookingsByUser(@PathVariable long bookingId, @AuthenticationPrincipal UserEntity loggedInUser)
 	{
 		UserBookingDto userDetails = ser.getBookingsByUser(bookingId, loggedInUser.getUserId());
 		return Resp.success(userDetails);
 	}
 	
-	@GetMapping("/getMyBookings") //My tickets in ui //returns all booking of a user
+	@GetMapping("/user/getMyBookings") //My tickets in ui //returns all booking of a user
 	public Resp<?> getAllBookingsByUser( @AuthenticationPrincipal UserEntity loggedInUser)
 	{
 		List<UserBookingDto> userDetailsList = ser.getAllBookingsByUser(loggedInUser.getUserId());
 		return Resp.success(userDetailsList);
 	}
 	
-	@GetMapping("/getByShowId/{showId}")
+	@GetMapping("/admin/getByShowId/{showId}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public Resp<?> getAllBookingByShow(@PathVariable long showId)
 	{
@@ -71,7 +71,7 @@ public class BookingController
 		return Resp.success(allBookings);
 	}
 	
-	@GetMapping("/getAvailableSeats")
+	@GetMapping("/admin/getAvailableSeats")
 	@PreAuthorize("hasRole('ADMIN')")
 	public Resp<?> getAllAvailableSeats(@RequestParam long showId)
 	{
