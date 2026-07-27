@@ -17,6 +17,6 @@ public class AuthResponseDto
 	private Long userId;
 	private String email;
 	private String firstName;
-	private String lasytName;
+	private String lastName;
 	private String role;
 }
