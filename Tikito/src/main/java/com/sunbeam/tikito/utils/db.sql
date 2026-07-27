@@ -11,7 +11,7 @@ CREATE TABLE users(
     image_name VARCHAR(80),
     password VARCHAR(200),
     phone CHAR(10),
-    role VARCHAR(20) NOT NULL CHECK (role IN ('user', 'admin')),
+    role VARCHAR(20) NOT NULL CHECK (role IN ('ROLE_USER', 'ROLE_ADMIN')),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                ON UPDATE CURRENT_TIMESTAMP

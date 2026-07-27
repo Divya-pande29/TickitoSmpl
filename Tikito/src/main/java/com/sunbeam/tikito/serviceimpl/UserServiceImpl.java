@@ -52,30 +52,30 @@ import jakarta.transaction.Transactional;
 			
 		}
 
-		@Override
-		public UserDto login(UserDto dto) {
-			  UserEntity user =
-		                userDao.findByEmail(dto.getEmail())
-		                       .orElseThrow(() ->
-		                               new RuntimeException(
-		                                       "Invalid Email"));
-
-		        if (!user.getPassword()
-		                 .equals(dto.getPassword())) {
-		            throw new RuntimeException(
-		                    "Invalid Password");
-		        }
-
-		        UserDto response =
-		                modelMapper.map(user, UserDto.class);
-
-		        response.setPassword(null);
-		        response.setOldPassword(null);
-		        response.setNewPassword(null);
-
-		        return response;
-		
-		}
+//		@Override
+//		public UserDto login(UserDto dto) {
+//			  UserEntity user =
+//		                userDao.findByEmail(dto.getEmail())
+//		                       .orElseThrow(() ->
+//		                               new RuntimeException(
+//		                                       "Invalid Email"));
+//
+//		        if (!user.getPassword()
+//		                 .equals(dto.getPassword())) {
+//		            throw new RuntimeException(
+//		                    "Invalid Password");
+//		        }
+//
+//		        UserDto response =
+//		                modelMapper.map(user, UserDto.class);
+//
+//		        response.setPassword(null);
+//		        response.setOldPassword(null);
+//		        response.setNewPassword(null);
+//
+//		        return response;
+//		
+//		}
 
 		@Override
 		public UserDto getProfile(Long userId) {
