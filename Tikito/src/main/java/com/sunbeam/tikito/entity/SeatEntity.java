@@ -2,6 +2,8 @@ package com.sunbeam.tikito.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,9 +32,10 @@ public class SeatEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "venue_id")
+	@JsonIgnore
 	private VenueEntity venue;
 
-	@Column(name = "seat_no")
+	@Column(name = "seat_no", nullable = false)
 	private String seatNo;
 
 	@Column(name = "created_at")

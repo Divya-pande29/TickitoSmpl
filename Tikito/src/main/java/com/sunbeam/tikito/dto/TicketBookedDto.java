@@ -18,7 +18,7 @@ public class TicketBookedDto
 {
 	private Long bookingId;
 	private Long showId;
-	private List<Long> seatNums;
+	private List<String> seatNums;
 	private Double totalAmt;
 	private PaymentStatus paymentStatus;
 	private BookingStatus bookingStatus;

@@ -41,7 +41,6 @@ public class EventServiceImpl implements EventService {
 				          .orElseThrow(() -> new RuntimeException("Event not found"));
 		return modelMapper.map(event,EventResponseDto.class);
 		}
-
 		
 		
 	

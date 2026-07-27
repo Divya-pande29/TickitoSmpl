@@ -32,14 +32,19 @@ public class VenueEntity {
 	@Column(name = "venue_id")
 	private Long venueId; //changed id to venueId // ok
 
+	@Column(name = "venue_name")
 	private String name;
 
+	@Column(name = "venue_address")
 	private String address;
-
+	
+	@Column(name = "seat_capacity")
+	private Integer seatCapacity;
+  
 	@Column(name = "are_facilities_available")
-	private boolean areFacilitiesAvailable;
+	private boolean isAreFacilitiesAvailable;
 
-	@OneToMany(mappedBy = "venue")
+	@OneToMany(mappedBy = "venue" , fetch = FetchType.LAZY)
 	private List<SeatEntity> seatList;
 
 	@OneToMany(mappedBy = "venue", fetch = FetchType.LAZY)
