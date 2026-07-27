@@ -1,14 +1,17 @@
 package com.sunbeam.tikito.services;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.sunbeam.tikito.dto.UserDto;
 
 public interface UserService {
 	UserDto register(UserDto dto);
 //	UserDto login(UserDto dto);
 	UserDto getProfile(Long userId);
-	String updatePassword(UserDto dto);
+	String updatePassword(Long userId, UserDto dto);
 	String forgotPassword(UserDto dto);
 	String deleteAccount(Long userId);
+	 //String uploadProfileImage(Long userId, MultipartFile image);
 }	
 //	String forgotPassword(String email,String newPassword);
 
