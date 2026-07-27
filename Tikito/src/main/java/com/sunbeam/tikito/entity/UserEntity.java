@@ -2,7 +2,14 @@ package com.sunbeam.tikito.entity;
 
     import java.time.LocalDate;
 import java.time.LocalDateTime;
-	import jakarta.persistence.Column;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import jakarta.persistence.Column;
 	import jakarta.persistence.Entity;
 	import jakarta.persistence.GeneratedValue;
 	import jakarta.persistence.GenerationType;
@@ -21,7 +28,7 @@ import java.time.LocalDateTime;
     @AllArgsConstructor
 	@Data
 	//@ToString(exclude == "")
-	public class UserEntity {
+	public class UserEntity implements UserDetails {
 	    
 	    @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,6 +75,15 @@ import java.time.LocalDateTime;
 	    public void onUpdate() {
 	    updatedAt = LocalDateTime.now();
 	}
+		@Override
+		public Collection<? extends GrantedAuthority> getAuthorities() {
+			List<GrantedAuthority> authorities =AuthorityUtils.createAuthorityList(this.role);
+			return authorities;
+		}
+		@Override
+		public String getUsername() {
+			return this.email;
+		}
 
 	    
 	}
