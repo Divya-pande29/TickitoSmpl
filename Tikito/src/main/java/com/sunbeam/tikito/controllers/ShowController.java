@@ -38,7 +38,7 @@ public class ShowController {
 	}
 
 	@GetMapping("/event/{eventId}")
-	public Resp<?> findByEvent(@PathVariable Long eventId) {
+	public Resp<?> findShowByEvent(@PathVariable Long eventId) {
 
 		List<ShowEntity> list = showServiceImpl.findByEvent(eventId);
 
@@ -61,7 +61,7 @@ public class ShowController {
 		return Resp.success(list);
 	}
 
-	@PostMapping
+	@PostMapping("/admin")
 	public Resp<?> saveShow(@RequestBody ShowDto dto) {
 
 		ShowEntity show = showServiceImpl.saveShow(dto);
@@ -69,7 +69,7 @@ public class ShowController {
 		return Resp.success(show);
 	}
 
-	@PutMapping("/{showId}")
+	@PutMapping("/admin/{showId}")
 	public Resp<?> updateShow(
 			@PathVariable Long showId,
 			@RequestBody ShowDto dto) {
@@ -79,7 +79,7 @@ public class ShowController {
 		return Resp.success(show);
 	}
 
-	@DeleteMapping("/{showId}")
+	@DeleteMapping("/admin/{showId}")
 	public Resp<String> deleteShow(@PathVariable Long showId) {
 
 		showServiceImpl.deleteShowById(showId);
