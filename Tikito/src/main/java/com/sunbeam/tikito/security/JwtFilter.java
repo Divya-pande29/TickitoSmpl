@@ -16,6 +16,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 	
@@ -64,10 +65,6 @@ public class JwtFilter extends OncePerRequestFilter {
 				Authentication authentication	= jwtUtil.getAuthentication(token, user);
 					
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				
-				System.out.println("Authenticated: " + authentication.isAuthenticated());
-				System.out.println("Principal: " + authentication.getPrincipal());
-				System.out.println("Authorities: " + authentication.getAuthorities());
 					
 				}
 				
