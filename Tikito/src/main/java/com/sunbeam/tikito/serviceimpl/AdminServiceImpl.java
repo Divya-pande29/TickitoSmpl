@@ -2,6 +2,7 @@ package com.sunbeam.tikito.serviceimpl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sunbeam.tikito.daos.UserDao;
@@ -14,20 +15,34 @@ import jakarta.transaction.Transactional;
 @Transactional
 @Service
 public class AdminServiceImpl implements AdminService{	
-	@Autowired
-	private UserDao userDao;
+	 private final UserDao userDao;
+	    private final ModelMapper modelMapper;
+	    private final PasswordEncoder passwordEncoder;
 
-	@Autowired
-	private ModelMapper modelMapper;
-	
-	@Override
-	public UserDto registerAdmin(UserDto dto) {
-		if(userDao.findByEmail(dto.getEmail()).isPresent())throw new RuntimeException("Email Already Exists");
-		UserEntity admin = modelMapper.map(dto,  UserEntity.class);
-		admin.setRole("Admin");
-		UserEntity savedAdmin = userDao.save(admin);
-		   UserDto response = modelMapper.map(savedAdmin,UserDto.class);
-		   response.setPassword(null);
+	    public AdminServiceImpl(UserDao userDao,
+	                            ModelMapper modelMapper,
+	                            PasswordEncoder passwordEncoder) {
+	        this.userDao = userDao;
+	        this.modelMapper = modelMapper;
+	        this.passwordEncoder = passwordEncoder;
+	    }
+	    @Override
+	    public UserDto registerAdmin(UserDto dto) {
+
+	        if (userDao.findByEmail(dto.getEmail()).isPresent()) {
+	            throw new RuntimeException("Email Already Exists");
+	        }
+
+	        UserEntity admin = modelMapper.map(dto, UserEntity.class);
+
+	        admin.setPassword(passwordEncoder.encode(dto.getPassword()));
+	        admin.setRole("ROLE_ADMIN");
+
+	        UserEntity savedAdmin = userDao.save(admin);
+
+	        UserDto response = modelMapper.map(savedAdmin, UserDto.class);
+	        response.setPassword(null);
+
 	        return response;
 	    }
 		
