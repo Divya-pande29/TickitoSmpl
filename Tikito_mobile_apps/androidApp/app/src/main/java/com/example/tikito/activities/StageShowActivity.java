@@ -1,4 +1,4 @@
-package com.example.tikito.activity;
+package com.example.tikito.activities;
 
 import android.os.Bundle;
 
