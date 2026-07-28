@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tikito">
         <activity
-            android:name=".activities.HomeActivity"
+            android:name=".activity.MovieActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,15 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- 2. BOOK SEAT ACTIVITY -->
         <activity
-            android:name=".activities.BookSeatActivity"
+            android:name=".activity.StageShowActivity"
             android:exported="false" />
-
-        <!-- 3. TICKET ACTIVITY -->
         <activity
-            android:name=".activities.TicketsActivity"
+            android:name=".activity.EventActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ConcertActivity"
             android:exported="false" />
     </application>
 
