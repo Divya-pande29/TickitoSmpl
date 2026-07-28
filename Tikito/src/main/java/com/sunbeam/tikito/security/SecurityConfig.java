@@ -2,6 +2,7 @@ package com.sunbeam.tikito.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -19,8 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig
 {
-	private UserDetailsService userDetailsService;
-	private JwtFilter jwtFilter;
+	private final UserDetailsService userDetailsService;
+	private final JwtFilter jwtFilter;
 	
 	public SecurityConfig(UserDetailsService userDetailsService, JwtFilter jwtFilter)
 	{
@@ -29,7 +30,7 @@ public class SecurityConfig
 	}
 	
 	@Bean
-	PasswordEncoder passwordEncoder()
+	public PasswordEncoder passwordEncoder()
 	{
 		return new BCryptPasswordEncoder();
 	}
@@ -38,7 +39,7 @@ public class SecurityConfig
 	AuthenticationManager authenticationManager(HttpSecurity http) throws Exception
 	{
 		AuthenticationManagerBuilder authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-		authManagerBuilder.userDetailsService(userDetailsService);
+		authManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 		
 		return authManagerBuilder.build();
 	}
@@ -49,14 +50,19 @@ public class SecurityConfig
 		http.csrf(csrf -> csrf.disable())
 		    .cors(cors -> { })
 			.authorizeHttpRequests(requests -> requests
-								   .requestMatchers("/tikito/auth/**","tikito/user/register", "/tikito/user/forgot-password").permitAll()
-								   .requestMatchers("/tikito/admin/register").hasRole("ADMIN")
+								   .requestMatchers("/tikito/auth/**","/tikito/user/register", "/tikito/user/forgot-password").permitAll()
+								   .requestMatchers("/tikito/admin/register").permitAll()
 								   .requestMatchers("/tikito/booking/user/**").hasRole("USER")
 								   .requestMatchers("/tikito/booking/admin/**").hasRole("ADMIN")
 								   .requestMatchers("/tikito/user/**").hasRole("USER")
-								   .requestMatchers("/tikito/events/**").hasRole("ADMIN")
-								   .requestMatchers("").hasRole("ADMIN")//VENUE, SHOW
-								   .requestMatchers("").hasRole("USER")//SHOW
+								   .requestMatchers(HttpMethod.POST, "/tikito/events/**").hasRole("ADMIN")
+								   .requestMatchers(HttpMethod.PUT, "/tikito/events/**").hasRole("ADMIN")
+								   .requestMatchers(HttpMethod.DELETE, "/tikito/events/**").hasRole("ADMIN")
+								   .requestMatchers(HttpMethod.GET, "/tikito/events/**").permitAll()
+								   .requestMatchers("/tikito/venue", "/tikito/venue/*", "/tikito/venue/name/*", "/tikito/venue/address/*").permitAll()
+								   .requestMatchers("/tikito/venue/admin/**").hasRole("ADMIN")
+								   .requestMatchers("/tikito/shows", "/tikito/shows/*", "/tikito/shows/event/*", "/tikito/shows/date/*", "/tikito/shows/time/*").permitAll()
+								   .requestMatchers("/tikito/shows/admin/**").hasRole("ADMIN")
 								   .anyRequest().authenticated())
 								   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 								   .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
