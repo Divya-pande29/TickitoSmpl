@@ -21,6 +21,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- 2. BOOK SEAT ACTIVITY -->
+        <activity
+            android:name=".activities.BookSeatActivity"
+            android:exported="false" />
+
+        <!-- 3. TICKET ACTIVITY -->
+        <activity
+            android:name=".activities.TicketsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
