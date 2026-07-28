@@ -1,6 +1,8 @@
 package com.example.tikito.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,8 +12,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tikito.R;
 
+import org.jetbrains.annotations.ApiStatus;
+
 public class HomeActivity extends AppCompatActivity {
 
+    Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,5 +27,13 @@ public class HomeActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        button = findViewById(R.id.book);
+
+        button.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(this, BookSeatActivity.class);
+            startActivity(intent);
+        });
+
     }
 }
