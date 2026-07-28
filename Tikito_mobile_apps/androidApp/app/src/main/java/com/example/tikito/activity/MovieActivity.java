@@ -1,4 +1,4 @@
-package com.example.tikito;
+package com.example.tikito.activity;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,11 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.tikito.R;
 
 public class MovieActivity extends AppCompatActivity {
     private ImageView btnBack, btnSearch;
