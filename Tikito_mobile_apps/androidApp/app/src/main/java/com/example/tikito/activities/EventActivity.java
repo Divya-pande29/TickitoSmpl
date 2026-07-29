@@ -13,7 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tikito.R;
 
-public class MovieActivity extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity {
 
     private ImageView btnBack;
     private TextView tvTitle;
@@ -26,35 +26,34 @@ public class MovieActivity extends AppCompatActivity {
     private ImageView imgPosterOdyssey;
     private TextView tvTitleOdyssey, tvRatingOdyssey;
 
-    // Upcoming Movies
+    // Upcoming Events
     private ImageView imgPosterMirzapur;
     private TextView tvTitleMirzapur, tvRatingMirzapur;
 
     private ImageView imgPosterAvengers;
     private TextView tvTitleAvengers, tvRatingAvengers;
 
-    // Top Rated
+    // Popular Events
     private ImageView imgPosterJanNeta;
     private TextView tvTitleJanNeta, tvRatingJanNeta;
 
     private ImageView imgPosterTeraYaar;
     private TextView tvTitleTeraYaar, tvRatingTeraYaar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
 
+
         initViews();
 
-        // Header
-        tvTitle.setText("Movies");
-        etSearch.setHint("Search Movies...");
+        tvTitle.setText("Events");
+        etSearch.setHint("Search Events...");
 
         btnBack.setOnClickListener(v -> finish());
 
-        loadMovieData();
+        loadEventData();
     }
 
     private void initViews() {
@@ -81,7 +80,7 @@ public class MovieActivity extends AppCompatActivity {
         tvTitleAvengers = findViewById(R.id.tvTitleAvengers);
         tvRatingAvengers = findViewById(R.id.tvRatingAvengers);
 
-        // Top Rated
+        // Popular
         imgPosterJanNeta = findViewById(R.id.imgPosterJanNeta);
         tvTitleJanNeta = findViewById(R.id.tvTitleJanNeta);
         tvRatingJanNeta = findViewById(R.id.tvRatingJanNeta);
@@ -91,36 +90,37 @@ public class MovieActivity extends AppCompatActivity {
         tvRatingTeraYaar = findViewById(R.id.tvRatingTeraYaar);
     }
 
-    private void loadMovieData() {
+    private void loadEventData() {
 
-        // ================= NOW SHOWING =================
+        // ================= TRENDING EVENTS =================
 
-        imgPosterEvilDead.setImageResource(R.drawable.back); // Replace with evil_dead
-        tvTitleEvilDead.setText("Evil Dead Burn");
-        tvRatingEvilDead.setText("★ 7.9 (30.8K)");
+        imgPosterEvilDead.setImageResource(R.drawable.back); // Replace with tech_fest
+        tvTitleEvilDead.setText("Tech Fest 2026");
+        tvRatingEvilDead.setText("Pune • Today");
 
-        imgPosterOdyssey.setImageResource(R.drawable.back); // Replace with odyssey
-        tvTitleOdyssey.setText("The Odyssey");
-        tvRatingOdyssey.setText("★ 9.2 (123K)");
+        imgPosterOdyssey.setImageResource(R.drawable.back); // Replace with startup_summit
+        tvTitleOdyssey.setText("Startup Summit");
+        tvRatingOdyssey.setText("Mumbai • 10:00 AM");
 
-        // ================= UPCOMING MOVIES =================
+        // ================= UPCOMING EVENTS =================
 
-        imgPosterMirzapur.setImageResource(R.drawable.back); // Replace with mirzapur
-        tvTitleMirzapur.setText("Mirzapur : The Movie");
-        tvRatingMirzapur.setText("Releasing : Aug 2026");
+        imgPosterMirzapur.setImageResource(R.drawable.back); // Replace with food_festival
+        tvTitleMirzapur.setText("Food Festival");
+        tvRatingMirzapur.setText("12 Aug 2026");
 
-        imgPosterAvengers.setImageResource(R.drawable.back); // Replace with avengers
-        tvTitleAvengers.setText("Avengers : Doomsday");
-        tvRatingAvengers.setText("Releasing : Dec 2026");
+        imgPosterAvengers.setImageResource(R.drawable.back); // Replace with auto_expo
+        tvTitleAvengers.setText("Auto Expo");
+        tvRatingAvengers.setText("25 Aug 2026");
 
-        // ================= TOP RATED =================
+        // ================= POPULAR EVENTS =================
 
-        imgPosterJanNeta.setImageResource(R.drawable.back); // Replace with jan_neta
-        tvTitleJanNeta.setText("Jan Neta");
-        tvRatingJanNeta.setText("★ 9.5 (200K)");
+        imgPosterJanNeta.setImageResource(R.drawable.back); // Replace with comic_con
+        tvTitleJanNeta.setText("Comic Con");
+        tvRatingJanNeta.setText("★ 4.9 (18K)");
 
-        imgPosterTeraYaar.setImageResource(R.drawable.back); // Replace with tera_yaar
-        tvTitleTeraYaar.setText("Tera Yaar Hoon Main");
-        tvRatingTeraYaar.setText("★ 9.1 (85K)");
+        imgPosterTeraYaar.setImageResource(R.drawable.back); // Replace with book_fair
+        tvTitleTeraYaar.setText("Book Fair");
+        tvRatingTeraYaar.setText("★ 4.8 (15K)");
     }
 }
+

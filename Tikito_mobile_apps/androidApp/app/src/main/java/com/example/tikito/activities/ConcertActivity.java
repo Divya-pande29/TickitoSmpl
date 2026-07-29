@@ -13,7 +13,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tikito.R;
 
-public class MovieActivity extends AppCompatActivity {
+public class ConcertActivity extends AppCompatActivity {
+
 
     private ImageView btnBack;
     private TextView tvTitle;
@@ -26,14 +27,14 @@ public class MovieActivity extends AppCompatActivity {
     private ImageView imgPosterOdyssey;
     private TextView tvTitleOdyssey, tvRatingOdyssey;
 
-    // Upcoming Movies
+    // Upcoming Concerts
     private ImageView imgPosterMirzapur;
     private TextView tvTitleMirzapur, tvRatingMirzapur;
 
     private ImageView imgPosterAvengers;
     private TextView tvTitleAvengers, tvRatingAvengers;
 
-    // Top Rated
+    // Popular Concerts
     private ImageView imgPosterJanNeta;
     private TextView tvTitleJanNeta, tvRatingJanNeta;
 
@@ -46,15 +47,15 @@ public class MovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
 
+
         initViews();
 
-        // Header
-        tvTitle.setText("Movies");
-        etSearch.setHint("Search Movies...");
+        tvTitle.setText("Concerts");
+        etSearch.setHint("Search Concerts...");
 
         btnBack.setOnClickListener(v -> finish());
 
-        loadMovieData();
+        loadConcertData();
     }
 
     private void initViews() {
@@ -81,7 +82,7 @@ public class MovieActivity extends AppCompatActivity {
         tvTitleAvengers = findViewById(R.id.tvTitleAvengers);
         tvRatingAvengers = findViewById(R.id.tvRatingAvengers);
 
-        // Top Rated
+        // Popular
         imgPosterJanNeta = findViewById(R.id.imgPosterJanNeta);
         tvTitleJanNeta = findViewById(R.id.tvTitleJanNeta);
         tvRatingJanNeta = findViewById(R.id.tvRatingJanNeta);
@@ -91,36 +92,36 @@ public class MovieActivity extends AppCompatActivity {
         tvRatingTeraYaar = findViewById(R.id.tvRatingTeraYaar);
     }
 
-    private void loadMovieData() {
+    private void loadConcertData() {
 
-        // ================= NOW SHOWING =================
+        // ================= LIVE NOW =================
 
-        imgPosterEvilDead.setImageResource(R.drawable.back); // Replace with evil_dead
-        tvTitleEvilDead.setText("Evil Dead Burn");
-        tvRatingEvilDead.setText("★ 7.9 (30.8K)");
+        imgPosterEvilDead.setImageResource(R.drawable.back);   // Replace with arijit_live
+        tvTitleEvilDead.setText("Arijit Singh Live");
+        tvRatingEvilDead.setText("Mumbai • 7:00 PM");
 
-        imgPosterOdyssey.setImageResource(R.drawable.back); // Replace with odyssey
-        tvTitleOdyssey.setText("The Odyssey");
-        tvRatingOdyssey.setText("★ 9.2 (123K)");
+        imgPosterOdyssey.setImageResource(R.drawable.back);    // Replace with diljit_live
+        tvTitleOdyssey.setText("Diljit Dosanjh");
+        tvRatingOdyssey.setText("Pune • 8:00 PM");
 
-        // ================= UPCOMING MOVIES =================
+        // ================= UPCOMING =================
 
-        imgPosterMirzapur.setImageResource(R.drawable.back); // Replace with mirzapur
-        tvTitleMirzapur.setText("Mirzapur : The Movie");
-        tvRatingMirzapur.setText("Releasing : Aug 2026");
+        imgPosterMirzapur.setImageResource(R.drawable.back);   // Replace with ar_rahman
+        tvTitleMirzapur.setText("A. R. Rahman Live");
+        tvRatingMirzapur.setText("15 Aug 2026");
 
-        imgPosterAvengers.setImageResource(R.drawable.back); // Replace with avengers
-        tvTitleAvengers.setText("Avengers : Doomsday");
-        tvRatingAvengers.setText("Releasing : Dec 2026");
+        imgPosterAvengers.setImageResource(R.drawable.back);   // Replace with honey_singh
+        tvTitleAvengers.setText("Yo Yo Honey Singh");
+        tvRatingAvengers.setText("28 Sep 2026");
 
-        // ================= TOP RATED =================
+        // ================= POPULAR =================
 
-        imgPosterJanNeta.setImageResource(R.drawable.back); // Replace with jan_neta
-        tvTitleJanNeta.setText("Jan Neta");
-        tvRatingJanNeta.setText("★ 9.5 (200K)");
+        imgPosterJanNeta.setImageResource(R.drawable.back);    // Replace with shreya
+        tvTitleJanNeta.setText("Shreya Ghoshal");
+        tvRatingJanNeta.setText("★ 4.9 (25K)");
 
-        imgPosterTeraYaar.setImageResource(R.drawable.back); // Replace with tera_yaar
-        tvTitleTeraYaar.setText("Tera Yaar Hoon Main");
-        tvRatingTeraYaar.setText("★ 9.1 (85K)");
+        imgPosterTeraYaar.setImageResource(R.drawable.back);   // Replace with sonu
+        tvTitleTeraYaar.setText("Sonu Nigam Live");
+        tvRatingTeraYaar.setText("★ 4.8 (20K)");
     }
 }
