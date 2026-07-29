@@ -1,4 +1,4 @@
 package com.example.tikito.services;
 
-public class ShowAPI {
+public interface ShowAPI {
 }
