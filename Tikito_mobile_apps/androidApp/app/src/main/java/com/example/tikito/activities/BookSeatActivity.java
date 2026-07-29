@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tikito.R;
-import com.example.tikito.adaptors.DateAdaptor;
-import com.example.tikito.adaptors.SeatAdaptor;
-import com.example.tikito.adaptors.TimeAdaptor;
+import com.example.tikito.adapters.DateAdapter;
+import com.example.tikito.adapters.SeatAdapter;
+import com.example.tikito.adapters.TimeAdapter;
 import com.example.tikito.entities.DateItem;
 import com.example.tikito.entities.SeatItem;
 import com.example.tikito.entities.TimeItem;
@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BookSeatActivity extends AppCompatActivity implements SeatAdaptor.OnSeatSelectedListener
+public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.OnSeatSelectedListener
 {
     RecyclerView recyclerViewDates, recyclerViewTimes, recyclerViewSeats;
-    DateAdaptor dateAdaptor;
-    TimeAdaptor timeAdaptor;
-    SeatAdaptor seatAdaptor;
+    DateAdapter dateAdapter;
+    TimeAdapter timeAdapter;
+    SeatAdapter seatAdapter;
     TextView txtNoOfSeats, txtSeatNos, txtMovieName, txtVenueNameAndAdr;
 
     @Override
@@ -56,14 +56,14 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdaptor.O
         DateItem d4 = new DateItem("Sat", "22 Jun");
 
         recyclerViewDates = findViewById(R.id.recyclerViewDates);
-        dateAdaptor = new DateAdaptor(this, dates);
+        dateAdapter = new DateAdapter(this, dates);
 
         dates.add(d1);
         dates.add(d2);
         dates.add(d3);
         dates.add(d4);
 
-        recyclerViewDates.setAdapter(dateAdaptor);
+        recyclerViewDates.setAdapter(dateAdapter);
         recyclerViewDates.setLayoutManager(layoutManagerDate);
 
         List<TimeItem> times = new ArrayList<>();
@@ -72,13 +72,13 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdaptor.O
         TimeItem t3 = new TimeItem("04.45");
 
         recyclerViewTimes = findViewById(R.id.recyclerViewTimes);
-        timeAdaptor = new TimeAdaptor(this, times);
+        timeAdapter = new TimeAdapter(this, times);
 
         times.add(t1);
         times.add(t2);
         times.add(t3);
 
-        recyclerViewTimes.setAdapter(timeAdaptor);
+        recyclerViewTimes.setAdapter(timeAdapter);
         recyclerViewTimes.setLayoutManager(layoutManagerTime);
 
         recyclerViewSeats = findViewById(R.id.recyclerViewSeats);
@@ -94,8 +94,8 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdaptor.O
         SeatItem s9 = new SeatItem("a4");
         SeatItem s10 = new SeatItem("a5");
         List<SeatItem> seats = Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8, s9, s10);
-        seatAdaptor = new SeatAdaptor(this, seats, this);
-        recyclerViewSeats.setAdapter(seatAdaptor);
+        seatAdapter = new SeatAdapter(this, seats, this);
+        recyclerViewSeats.setAdapter(seatAdapter);
         recyclerViewSeats.setLayoutManager(new GridLayoutManager(this, 3));
     }
 

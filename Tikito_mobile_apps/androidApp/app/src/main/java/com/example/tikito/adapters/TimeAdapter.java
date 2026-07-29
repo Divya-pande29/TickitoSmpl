@@ -1,7 +1,6 @@
-package com.example.tikito.adaptors;
+package com.example.tikito.adapters;
 
 import android.content.Context;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,12 @@ import com.example.tikito.entities.TimeItem;
 
 import java.util.List;
 
-public class TimeAdaptor extends RecyclerView.Adapter<TimeAdaptor.MyViewHolder>
+public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder>
 {
     Context context;
     List<TimeItem> timeItems;
 
-    public TimeAdaptor(Context context, List<TimeItem> timeItems) {
+    public TimeAdapter(Context context, List<TimeItem> timeItems) {
         this.context = context;
         this.timeItems = timeItems;
     }
