@@ -1,5 +1,6 @@
 package com.example.tikito.services;
 
+
 import com.example.tikito.entities.Event;
 
 
@@ -27,3 +28,4 @@ public interface EventAPI {
             @Path("eventId") int eventId
     );
 }
+

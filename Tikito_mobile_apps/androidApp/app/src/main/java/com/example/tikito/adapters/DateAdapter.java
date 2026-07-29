@@ -1,4 +1,4 @@
-package com.example.tikito.adaptors;
+package com.example.tikito.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,12 +15,12 @@ import com.example.tikito.entities.DateItem;
 
 import java.util.List;
 
-public class DateAdaptor extends RecyclerView.Adapter<DateAdaptor.MyViewHolder>
+public class DateAdapter extends RecyclerView.Adapter<DateAdapter.MyViewHolder>
 {
     Context context;
     List<DateItem> dateItemList;
 
-    public DateAdaptor(Context context, List<DateItem> dateItemList) {
+    public DateAdapter(Context context, List<DateItem> dateItemList) {
         this.context = context;
         this.dateItemList = dateItemList;
     }

@@ -1,11 +1,11 @@
-package com.example.tikito.adaptors;
+package com.example.tikito.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,14 +15,14 @@ import com.example.tikito.entities.SeatItem;
 
 import java.util.List;
 
-public class SeatAdaptor extends RecyclerView.Adapter<SeatAdaptor.MyViewHolder>
+public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.MyViewHolder>
 {
     Context context;
     List<SeatItem> seatItemList;
 
     private OnSeatSelectedListener listener;
 
-    public SeatAdaptor(Context context, List<SeatItem> seatItemList, OnSeatSelectedListener listener) {
+    public SeatAdapter(Context context, List<SeatItem> seatItemList, OnSeatSelectedListener listener) {
         this.context = context;
         this.listener = listener;
         this.seatItemList = seatItemList;
