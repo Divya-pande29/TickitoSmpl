@@ -24,7 +24,7 @@ public class ProfileFragment extends Fragment {
     private MaterialCardView cardHistory;
     private MaterialCardView cardUpdateProfile;
 
-    private TextView tvUserName;
+    private TextView textUserName;
 
     public ProfileFragment() {
     }
@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
 
         btnLogout = view.findViewById(R.id.btnLogout);
 
-        tvUserName = view.findViewById(R.id.tvUserName);
+        textUserName = view.findViewById(R.id.textUserName);
 
         cardCurrentBookings = view.findViewById(R.id.cardCurrentBookings);
         cardHistory = view.findViewById(R.id.cardHistory);
