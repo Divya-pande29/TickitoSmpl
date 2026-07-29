@@ -68,7 +68,7 @@ public VenueController(VenueServiceImpl venueServiceImpl) {
 		return Resp.success(list);
 	}
 
-	@PostMapping
+	@PostMapping("/admin")
 	public Resp<?> saveVenue(@RequestBody VenueDto dto) {
 
 		VenueEntity venue = venueServiceImpl.saveVenue(dto);
@@ -76,7 +76,7 @@ public VenueController(VenueServiceImpl venueServiceImpl) {
 		return Resp.success(venue);
 	}
 
-	@PutMapping("/{venueId}")
+	@PutMapping("/admin/{venueId}")
 	public Resp<?> updateVenue(@PathVariable Long venueId,
 			                   @RequestBody VenueDto dto) {
 
@@ -85,7 +85,7 @@ public VenueController(VenueServiceImpl venueServiceImpl) {
 		return Resp.success(venue);
 	}
 
-	@DeleteMapping("/{venueId}")
+	@DeleteMapping("/admin/{venueId}")
 	public Resp<String> deleteVenue(@PathVariable Long venueId) {
 
 		venueServiceImpl.deleteVenueById(venueId);
