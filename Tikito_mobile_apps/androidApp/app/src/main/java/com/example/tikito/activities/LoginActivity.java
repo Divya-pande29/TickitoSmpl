@@ -73,8 +73,10 @@ public class LoginActivity extends AppCompatActivity {
 
         btnSignUp.setOnClickListener(view -> {
 
-            // TODO
-            // Open Register Fragment / Activity
+            Intent intent = new Intent(LoginActivity.this,
+                    RegisterActivity.class);
+
+            startActivity(intent);
 
         });
 

@@ -31,6 +31,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto register(UserDto dto) {
+    	
+    	
 
         if (userDao.findByEmail(dto.getEmail()).isPresent())
             throw new RuntimeException("Email already exists");
