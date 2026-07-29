@@ -25,8 +25,6 @@ public class Show implements Serializable
 
     public Show(Long showId, Long venueId, Long eventId, String language, Double price, boolean isEighteenPlus, LocalDate showDate, LocalTime showStartTime, LocalTime showEndTime) {
         this.showId = showId;
-        this.venueId = venueId;
-        this.eventId = eventId;
         this.language = language;
         this.price = price;
         this.isEighteenPlus = isEighteenPlus;

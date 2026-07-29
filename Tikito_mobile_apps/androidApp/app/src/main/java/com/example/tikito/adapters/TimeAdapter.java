@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,10 +18,18 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder>
 {
     Context context;
     List<TimeItem> timeItems;
+    public void setTimeItems(List<TimeItem> dateItems) {
+        this.timeItems = dateItems;
+        selectedPosition = RecyclerView.NO_POSITION;
+        notifyDataSetChanged();
+    }
+    private OnTimeClickListener listener;
+    private int selectedPosition = RecyclerView.NO_POSITION;
 
-    public TimeAdapter(Context context, List<TimeItem> timeItems) {
+    public TimeAdapter(Context context, List<TimeItem> timeItems, OnTimeClickListener listener) {
         this.context = context;
         this.timeItems = timeItems;
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,10 +44,26 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder>
         TimeItem t = timeItems.get(position);
 
         holder.txtTime.setText(t.getTime());
+        if(position == selectedPosition)
+        {
+            holder.itemView.setBackgroundResource(R.drawable.bg_selected_datetime);
+        }
+        else
+        {
+            holder.itemView.setBackgroundResource(R.drawable.bg_normal_datetime);
+        }
 
         holder.itemView.setOnClickListener(v ->
         {
-            Toast.makeText(context, t.getTime() + " selected", Toast.LENGTH_SHORT).show();
+            int previousPosition = selectedPosition;
+            selectedPosition = holder.getAdapterPosition();
+
+            if(previousPosition != RecyclerView.NO_POSITION)
+                notifyItemChanged(previousPosition);
+
+            notifyItemChanged(selectedPosition);
+
+            listener.onTimeClicked(t);
         });
     }
 
@@ -56,5 +79,10 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder>
             super(itemView);
             txtTime = itemView.findViewById(R.id.txtTime);
         }
+    }
+
+    public interface OnTimeClickListener
+    {
+        void onTimeClicked(TimeItem timeItems);
     }
 }
