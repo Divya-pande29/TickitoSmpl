@@ -63,6 +63,7 @@ public class SecurityConfig
 								   .requestMatchers("/tikito/venue/admin/**").hasRole("ADMIN")
 								   .requestMatchers("/tikito/shows", "/tikito/shows/*", "/tikito/shows/event/*", "/tikito/shows/date/*", "/tikito/shows/time/*").permitAll()
 								   .requestMatchers("/tikito/shows/admin/**").hasRole("ADMIN")
+								   .requestMatchers("/posters/**").permitAll()
 								   .anyRequest().authenticated())
 								   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 								   .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
