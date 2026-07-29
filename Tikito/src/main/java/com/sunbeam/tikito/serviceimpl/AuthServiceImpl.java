@@ -19,6 +19,12 @@ public class AuthServiceImpl implements AuthService
 	private AuthenticationManager authManager;
 	private JwtUtil jwtUtil;
 	
+	public AuthServiceImpl(AuthenticationManager authManager, JwtUtil jwtUtil) 
+	{
+		this.authManager = authManager;
+		this.jwtUtil = jwtUtil;
+	}
+
 	@Override
 	public AuthResponseDto login(AuthRequestDto request)
 	{

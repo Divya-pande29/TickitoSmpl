@@ -9,7 +9,7 @@ import com.sunbeam.tikito.dto.UserDto;
 import com.sunbeam.tikito.serviceimpl.AdminServiceImpl;
 import com.sunbeam.tikito.utils.Resp;
 
-@RequestMapping("/admin")
+@RequestMapping("/tikito/admin")
 @RestController
 
 public class AdminController {
