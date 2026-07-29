@@ -1,4 +1,4 @@
-package com.example.tikito.adaptors;
+package com.example.tikito.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import com.example.tikito.entities.Tickets;
 
 import java.util.List;
 
-public class MyTicketsAdaptor extends RecyclerView.Adapter<MyTicketsAdaptor.MyViewHolder>
+public class MyTicketsAdapter extends RecyclerView.Adapter<MyTicketsAdapter.MyViewHolder>
 {
     Context context;
     List<Tickets> ticketsList;
