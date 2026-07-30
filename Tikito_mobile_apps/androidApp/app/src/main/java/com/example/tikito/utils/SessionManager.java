@@ -48,4 +48,24 @@ public class SessionManager {
         editor.clear();
         editor.apply();
     }
+
+    public int getUserId() {
+        return preferences.getInt(AppConstants.USER_ID, 0);
+    }
+
+    public String getEmail() {
+        return preferences.getString(AppConstants.EMAIL, "");
+    }
+
+    public String getFirstName() {
+        return preferences.getString(AppConstants.FIRST_NAME, "");
+    }
+
+    public String getLastName() {
+        return preferences.getString(AppConstants.LAST_NAME, "");
+    }
+
+    public String getRole() {
+        return preferences.getString(AppConstants.ROLE, "");
+    }
 }
