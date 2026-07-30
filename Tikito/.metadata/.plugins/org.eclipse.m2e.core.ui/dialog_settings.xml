@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="D:\TickitoSmpl\Tikito"/>
 			<item value="F:\vaish\Documents\TickitoSmpl\Tikito"/>
 		</list>
 		<list key="projectNameTemplate">

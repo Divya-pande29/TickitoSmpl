@@ -1,8 +1,8 @@
 package com.example.tikito.constants;
 
 public class AppConstants {
-
-    public static final String BASE_URL = "http://192.168.1.101:8080/"; //YOUR_IP_ADDRESS
+  
+    public static final String BASE_URL = "http://172.24.120.230:8080/"; //YOUR_IP_ADDRESS
 
     public static final String PREF_NAME = "TikitoPreferences";
 

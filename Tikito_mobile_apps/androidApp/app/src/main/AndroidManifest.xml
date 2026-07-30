@@ -15,6 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tikito">
         <activity
+            android:name=".ItemCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FragmentReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FragmentHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.HomeActivity"
             android:exported="true">
             <intent-filter>
