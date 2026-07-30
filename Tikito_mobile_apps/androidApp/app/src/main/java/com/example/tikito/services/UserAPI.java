@@ -18,3 +18,4 @@ public interface UserAPI {
     Call<ApiResponse<UserDto>> register(@Body UserDto userDto);
 
 }
+
