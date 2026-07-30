@@ -51,6 +51,7 @@ public class SecurityConfig
 		    .cors(cors -> { })
 			.authorizeHttpRequests(requests -> requests
 								   .requestMatchers("/tikito/auth/**","/tikito/user/register", "/tikito/user/forgot-password").permitAll()
+								   .requestMatchers(HttpMethod.GET,"/tikito/booking/admin/getAvailableSeats").hasAnyRole("USER", "ADMIN")
 								   .requestMatchers("/tikito/admin/register").permitAll()
 								   .requestMatchers("/tikito/booking/user/**").hasRole("USER")
 								   .requestMatchers("/tikito/booking/admin/**").hasRole("ADMIN")

@@ -15,16 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tikito">
         <activity
-<<<<<<< Updated upstream
-            android:name=".activities.ConcertActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.HomeActivity"
-=======
-            android:name=".activities.LoginActivity"
->>>>>>> Stashed changes
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,25 +24,14 @@
             </intent-filter>
         </activity>
         <activity
-<<<<<<< Updated upstream
             android:name=".activities.MovieActivity"
-            android:exported="true"></activity>
+            android:exported="false"/>
         <activity
             android:name=".activities.StageShowActivity"
             android:exported="false" />
         <activity
             android:name=".activities.BookSeatActivity"
             android:exported="false" />
-=======
-            android:name=".activities.HomeActivity"
-            android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-        </activity>
->>>>>>> Stashed changes
     </application>
 
 </manifest>

@@ -1,6 +1,6 @@
 package com.example.tikito.services;
 
-public class EventAPI
+public interface EventAPI
 {
 
 }

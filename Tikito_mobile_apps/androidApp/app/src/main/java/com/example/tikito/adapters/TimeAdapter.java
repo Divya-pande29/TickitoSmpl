@@ -23,6 +23,12 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.MyViewHolder>
         selectedPosition = RecyclerView.NO_POSITION;
         notifyDataSetChanged();
     }
+
+    public void setSelectedPosition(int position)
+    {
+        selectedPosition = position;
+        notifyDataSetChanged();
+    }
     private OnTimeClickListener listener;
     private int selectedPosition = RecyclerView.NO_POSITION;
 

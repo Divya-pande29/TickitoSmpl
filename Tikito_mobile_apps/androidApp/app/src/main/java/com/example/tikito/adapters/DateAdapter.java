@@ -26,6 +26,12 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.MyViewHolder>
         selectedPosition = RecyclerView.NO_POSITION;
         notifyDataSetChanged();
     }
+
+    public void setSelectedPosition(int position)
+    {
+        selectedPosition = position;
+        notifyDataSetChanged();
+    }
     OnDateClickListener listener;
     private int selectedPosition = RecyclerView.NO_POSITION;
 
