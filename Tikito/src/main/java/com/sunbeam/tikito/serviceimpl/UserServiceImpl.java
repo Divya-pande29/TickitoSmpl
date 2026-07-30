@@ -64,6 +64,12 @@ public class UserServiceImpl implements UserService {
                         new RuntimeException("User Not Found"));
 
         UserDto response = modelMapper.map(user, UserDto.class);
+        
+        if (response.getImageName() != null &&
+        	    !response.getImageName().isBlank()) {
+
+        	    response.setImageName("/profiles/" + response.getImageName());
+        	}
 
         response.setPassword(null);
         response.setOldPassword(null);
@@ -114,6 +120,20 @@ public class UserServiceImpl implements UserService {
         userDao.delete(user);
 
         return "Account Deleted Successfully";
+    }
+    
+    @Override
+    public String updateProfileImage(Long userId, UserDto dto) {
+
+        UserEntity user = userDao.findById(userId)
+                .orElseThrow(() ->
+                        new RuntimeException("User Not Found"));
+
+        user.setImageName(dto.getImageName());
+
+        userDao.save(user);
+
+        return "Profile Image Updated Successfully";
     }
 }
 

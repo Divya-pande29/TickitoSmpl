@@ -11,7 +11,9 @@ public class WebConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         registry.addResourceHandler("/posters/**")
-                .addResourceLocations("file:D:/TickitoUploads/posters/");
-    }
+                .addResourceLocations("file:D:/TickitoSmpl/Uploads/posters/");
 
+        registry.addResourceHandler("/profiles/**")
+                .addResourceLocations("file:D:/TickitoSmpl/Uploads/profiles/");
+    }
 }

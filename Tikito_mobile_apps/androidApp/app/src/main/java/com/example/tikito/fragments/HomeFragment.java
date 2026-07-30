@@ -22,8 +22,7 @@ public class HomeFragment  extends Fragment {
 
     RecyclerView categoryRecyclerView;
 
-    List<
-                Category> categoryList;
+    List<Category> categoryList;
 
     public HomeFragment() {
         // Required empty public constructor

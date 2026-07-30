@@ -20,9 +20,15 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public String uploadPoster(MultipartFile file) throws IOException {
 
-        String filename = fileUploadUtil.upload(file);
+    	return fileUploadUtil.upload(file, "posters");
+    }
+    
+    @Override
+    public String uploadProfile(MultipartFile file) throws IOException {
 
-        return "/posters/" + filename;
+        System.out.println("======== PROFILE UPLOAD API CALLED ========");
+
+    	return fileUploadUtil.upload(file, "profiles");
     }
 
 }
