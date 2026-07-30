@@ -4,12 +4,22 @@ import androidx.annotation.NonNull;
 
 public class SeatItem
 {
+    private Long seatId;
     private String seatNo;
     private boolean isSelected;
+
+    private boolean isBooked;
 
     public SeatItem(String seatNo) {
         this.seatNo = seatNo;
         this.isSelected = false;
+    }
+
+    public SeatItem(Long seatId, String seatNo, boolean isSelected, boolean isBooked) {
+        this.seatId = seatId;
+        this.seatNo = seatNo;
+        this.isSelected = isSelected;
+        this.isBooked = isBooked;
     }
 
     public SeatItem() {
@@ -31,11 +41,36 @@ public class SeatItem
         isSelected = selected;
     }
 
+    public Long getSeatId() {
+        return seatId;
+    }
+
+    public void setSeatId(Long seatId) {
+        this.seatId = seatId;
+    }
+
+    public boolean isBooked() {
+        return isBooked;
+    }
+
+    public void setBooked(boolean booked) {
+        isBooked = booked;
+    }
+
     @NonNull
+
     @Override
     public String toString() {
         return "SeatItem{" +
-                "seatNo='" + seatNo + '\'' +
+                "seatId=" + seatId +
+                ", seatNo='" + seatNo + '\'' +
+                ", isSelected=" + isSelected +
+                ", isBooked=" + isBooked +
                 '}';
+    }
+
+    public enum SeatStatus
+    {
+        AVAILABLE, BOOKED, SELECTED
     }
 }

@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class API
 {
-    public static final String URL = "http://192.168.68.116:8080/";
+    public static final String BASE_URL = "http://192.168.68.116:8080/tikito";
     private static API api = null;
 
     private EventAPI eventAPI;
