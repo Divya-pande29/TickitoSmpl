@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class API
 {
-    public static final String URL = "http://192.168.68.116:8080/";
+    public static final String URL = "http://172.18.4.85:8080/";
     private static API api = null;
 
     private EventAPI eventAPI;

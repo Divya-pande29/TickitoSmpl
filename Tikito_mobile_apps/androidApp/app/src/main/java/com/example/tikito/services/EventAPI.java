@@ -3,6 +3,8 @@ package com.example.tikito.services;
 
 import com.example.tikito.entities.ApiResponse;
 import com.example.tikito.entities.Event;
+import com.example.tikito.entities.EventType;
+import com.google.gson.JsonObject;
 
 
 import java.util.List;
@@ -26,5 +28,8 @@ public interface EventAPI {
     Call<ApiResponse<Event>> getEventById(
             @Path("eventId") int eventId
     );
+
+    @GET("/tikito/events/count-by-type")
+    Call<JsonObject> getEventCountByType();
 
 }

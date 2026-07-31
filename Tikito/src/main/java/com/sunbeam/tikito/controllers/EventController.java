@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sunbeam.tikito.dto.EventRequestDto;
 import com.sunbeam.tikito.dto.EventResponseDto;
+import com.sunbeam.tikito.dto.EventTypeCountDto;
 import com.sunbeam.tikito.serviceimpl.EventServiceImpl;
 import com.sunbeam.tikito.utils.Resp;
 
@@ -78,5 +79,10 @@ import com.sunbeam.tikito.utils.Resp;
 	public Resp<String> deleteEvent(@PathVariable Long eventId) {
     eventServiceImpl.deleteEventById(eventId);
     return Resp.success("Event deleted successfully");
-    }	  
+    }	
+	
+	@GetMapping("/count-by-type")
+	public Resp<List<EventTypeCountDto>> getEventCountByType() {
+	    return Resp.success(eventServiceImpl.getEventCountByType());
+	}
 }
