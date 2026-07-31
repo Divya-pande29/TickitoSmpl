@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,16 +14,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Tikito">
-        <activity
-<<<<<<< Updated upstream
-            android:name=".activities.ConcertActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.HomeActivity"
-=======
-            android:name=".activities.LoginActivity"
->>>>>>> Stashed changes
+        android:theme="@style/Theme.Tikito"
+        android:usesCleartextTraffic="true">
+
+        <activity android:name=".activities.SplashActivity"
+            android:exported="false"/>
+
+        <activity android:name=".activities.LoginActivity"
             android:exported="true">
 
             <intent-filter>
@@ -30,27 +28,38 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
-<<<<<<< Updated upstream
-            android:name=".activities.MovieActivity"
-            android:exported="true"></activity>
+            android:name=".activities.RegisterActivity"
+            android:exported="false"/>
         <activity
-            android:name=".activities.StageShowActivity"
+            android:name=".activities.ForgotPasswordActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ItemCategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.BookSeatActivity"
+            android:name=".FragmentReviewActivity"
             android:exported="false" />
-=======
+        <activity
+            android:name=".FragmentHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.HomeActivity"
             android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
->>>>>>> Stashed changes
+<!--        <activity-->
+<!--            android:name=".activities.MovieActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".activities.StageShowActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".activities.BookSeatActivity"-->
+<!--            android:exported="false" />-->
     </application>
 
 </manifest>

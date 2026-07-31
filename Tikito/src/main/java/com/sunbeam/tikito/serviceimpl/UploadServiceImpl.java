@@ -1,0 +1,34 @@
+package com.sunbeam.tikito.serviceimpl;
+
+import java.io.IOException;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.sunbeam.tikito.services.UploadService;
+import com.sunbeam.tikito.utils.FileUploadUtil;
+
+@Service
+public class UploadServiceImpl implements UploadService {
+
+    private final FileUploadUtil fileUploadUtil;
+
+    public UploadServiceImpl(FileUploadUtil fileUploadUtil) {
+        this.fileUploadUtil = fileUploadUtil;
+    }
+
+    @Override
+    public String uploadPoster(MultipartFile file) throws IOException {
+
+    	return fileUploadUtil.upload(file, "posters");
+    }
+    
+    @Override
+    public String uploadProfile(MultipartFile file) throws IOException {
+
+        System.out.println("======== PROFILE UPLOAD API CALLED ========");
+
+    	return fileUploadUtil.upload(file, "profiles");
+    }
+
+}
