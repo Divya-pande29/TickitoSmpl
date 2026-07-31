@@ -1,4 +1,4 @@
-package config;
+package com.sunbeam.tikito.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -9,11 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
+        System.out.println("========== WEB CONFIG LOADED ==========");
         registry.addResourceHandler("/posters/**")
-                .addResourceLocations("file:D:/TickitoSmpl/Uploads/posters/");
-
-        registry.addResourceHandler("/profiles/**")
-                .addResourceLocations("file:D:/TickitoSmpl/Uploads/profiles/");
-    }
+        .addResourceLocations("file:///D:/TickitoSmpl/Uploads/Posters/");
+    } 
 }

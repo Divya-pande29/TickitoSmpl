@@ -15,6 +15,7 @@ public class EventResponseDto {
     private String eventName;
 
     private String eventType;
+    
 
     private String eventDescription;
 

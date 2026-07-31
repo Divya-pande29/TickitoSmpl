@@ -1,9 +1,5 @@
 package com.example.tikito.utils;
 
-import static com.example.tikito.constants.AppConstants.BASE_URL;
-
-import android.content.Context;
-
 import com.example.tikito.constants.AppConstants;
 import com.example.tikito.services.BookingAPI;
 import com.example.tikito.services.EventAPI;
@@ -11,12 +7,12 @@ import com.example.tikito.services.ShowAPI;
 import com.example.tikito.services.UserAPI;
 import com.example.tikito.services.VenueAPI;
 
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class API
 {
+    public static final String URL = "http://172.18.4.85:8080/";
     private static API api = null;
 
     private EventAPI eventAPI;
@@ -25,15 +21,10 @@ public class API
     private BookingAPI bookingAPI;
     private UserAPI userAPI;
 
-    private API(Context context) {
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new AuthInterceptor(context))
-                .build();
-
+    private API()
+    {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(AppConstants.BASE_URL)
-                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -44,11 +35,9 @@ public class API
         userAPI = retrofit.create(UserAPI.class);
     }
 
-    public static API getApi(Context context) {
-
+    public static API getApi(){
         if (api == null)
-            api = new API(context);
-
+            api = new API();
         return api;
     }
 

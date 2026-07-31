@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.sunbeam.tikito.daos.EventDao;
 import com.sunbeam.tikito.dto.EventRequestDto;
 import com.sunbeam.tikito.dto.EventResponseDto;
+import com.sunbeam.tikito.dto.EventTypeCountDto;
 import com.sunbeam.tikito.entity.EventEntity;
 import com.sunbeam.tikito.services.EventService;
 
@@ -108,4 +109,8 @@ public class EventServiceImpl implements EventService {
 		return dtoList;
 	    }
 	
+	    @Override
+	    public List<EventTypeCountDto> getEventCountByType() {
+	        return eventDao.getEventCountByType();
+	    }
 }

@@ -1,33 +1,17 @@
 package com.example.tikito.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.tikito.R;
-import com.example.tikito.entities.ApiResponse;
-import com.example.tikito.entities.UserDto;
-import com.example.tikito.utils.API;
-import com.example.tikito.utils.SessionManager;
-
-import com.example.tikito.fragments.HomeFragment;
-import com.example.tikito.fragments.ReviewFragment;
+import com.example.tikito.fragments.home.EventListFragment;
 import com.example.tikito.fragments.profile.ProfileFragment;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class HomeActivity extends AppCompatActivity {
+
 
     LinearLayout navHome, navProfile, navReview;
     @Override
@@ -36,18 +20,16 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
 
-
         navHome = findViewById(R.id.navHome);
         navProfile = findViewById(R.id.navProfile);
-        navReview = findViewById(R.id.navReview);
 
 
         // Default fragment
-        loadFragment(new HomeFragment());
+        loadFragment(new EventListFragment());
 
 
         navHome.setOnClickListener(v -> {
-            loadFragment(new HomeFragment());
+            loadFragment(new EventListFragment());
         });
 
 
@@ -55,10 +37,6 @@ public class HomeActivity extends AppCompatActivity {
             loadFragment(new ProfileFragment());
         });
 
-
-        navReview.setOnClickListener(v -> {
-            loadFragment(new ReviewFragment());
-        });
 
     }
 

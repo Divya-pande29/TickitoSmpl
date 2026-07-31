@@ -38,13 +38,10 @@
             android:exported="false"/>
 
         <activity
-            android:name=".ItemCategoryActivity"
+            android:name=".activities.ShowActivity"
             android:exported="false" />
         <activity
-            android:name=".FragmentReviewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".FragmentHomeActivity"
+            android:name=".activities.EventActivity"
             android:exported="false" />
         <activity
             android:name=".activities.HomeActivity"
