@@ -1,9 +1,11 @@
 package com.example.tikito.fragments.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.tikito.R;
+import com.example.tikito.activities.BookSeatActivity;
+import com.example.tikito.activities.HomeActivity;
+import com.example.tikito.activities.TicketHistoryActivity;
+import com.example.tikito.activities.UpcomingTicketsActivity;
 import com.google.android.material.card.MaterialCardView;
 
 public class ProfileFragment extends Fragment {
@@ -25,6 +31,8 @@ public class ProfileFragment extends Fragment {
     private MaterialCardView cardUpdateProfile;
 
     private TextView textUserName;
+
+    Button booking;
 
     public ProfileFragment() {
     }
@@ -46,6 +54,7 @@ public class ProfileFragment extends Fragment {
 
     private void initViews(View view) {
 
+        booking = view.findViewById(R.id.booking);
         btnLogout = view.findViewById(R.id.btnLogout);
 
         textUserName = view.findViewById(R.id.textUserName);
@@ -60,16 +69,28 @@ public class ProfileFragment extends Fragment {
 
 
         cardCurrentBookings.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Current Bookings", Toast.LENGTH_SHORT).show());
+        {
+            Intent intent = new Intent(requireContext(), UpcomingTicketsActivity.class);
+            startActivity(intent);
+        });
 
         cardHistory.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Booking History", Toast.LENGTH_SHORT).show());
+        {
+            Intent intent = new Intent(requireContext(), TicketHistoryActivity.class);
+            startActivity(intent);
+        });
 
         cardUpdateProfile.setOnClickListener(v ->
                 Toast.makeText(getContext(), "Update Profile", Toast.LENGTH_SHORT).show());
 
         btnLogout.setOnClickListener(v ->
                 Toast.makeText(getContext(), "Logout", Toast.LENGTH_SHORT).show());
+
+        booking.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(requireContext(), BookSeatActivity.class);
+            startActivity(intent);
+        });
 
     }
 

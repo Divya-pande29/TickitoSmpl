@@ -128,6 +128,7 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
         confirm.setOnClickListener(v ->
         {
             bookSeats();
+            Toast.makeText(this, "Booking Confirmed", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -164,47 +165,133 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
     }
     private void loadShows(Event event)
     {
+        Log.d("BOOK", "========== LOAD SHOWS ==========");
         Log.d("BOOK", "Calling API for eventId = " + event.getEventId());
+
         showList.clear();
-        API.getApi().getShowAPI().findShowByEvent(event.getEventId())
-                .enqueue(new Callback<JsonObject>() {
+
+        API.getApi()
+                .getShowAPI()
+                .findShowByEvent(event.getEventId())
+                .enqueue(new Callback<JsonObject>()
+                {
                     @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    public void onResponse(Call<JsonObject> call,
+                                           Response<JsonObject> response)
+                    {
+                        Log.d("BOOK", "HTTP Code = " + response.code());
+                        Log.d("BOOK", "Successful = " + response.isSuccessful());
 
-                        try {
+                        if (!response.isSuccessful())
+                        {
+                            try
+                            {
+                                if (response.errorBody() != null)
+                                {
+                                    Log.e("BOOK",
+                                            "Error Body = "
+                                                    + response.errorBody().string());
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Log.e("BOOK",
+                                        "Unable to read error body",
+                                        e);
+                            }
 
-                            Log.d("BOOK", "Response received");
+                            return;
+                        }
 
-                            JsonObject responseBody = response.body();
-                            Log.d("BOOK", responseBody.toString());
-                            JsonArray jsonArr = responseBody.getAsJsonArray(AppConstants.RESPONSE_DATA);
+                        JsonObject responseBody = response.body();
+
+                        if (responseBody == null)
+                        {
+                            Log.e("BOOK", "Response body is NULL");
+                            return;
+                        }
+
+                        try
+                        {
+                            Log.d("BOOK",
+                                    "Response JSON = " + responseBody.toString());
+
+                            JsonArray jsonArr =
+                                    responseBody.getAsJsonArray(
+                                            AppConstants.RESPONSE_DATA);
+
+                            if (jsonArr == null)
+                            {
+                                Log.e("BOOK",
+                                        "JSON array 'data' is NULL");
+                                return;
+                            }
+
+                            Log.d("BOOK",
+                                    "Shows received = " + jsonArr.size());
+
                             showList.clear();
-                            for (JsonElement element : jsonArr) {
+
+                            for (JsonElement element : jsonArr)
+                            {
                                 JsonObject obj = element.getAsJsonObject();
-                                Log.d("BOOK", obj.toString());
+
+                                Log.d("BOOK",
+                                        "Show JSON = " + obj.toString());
+
                                 Show show = new Show();
 
-                                show.setShowId(obj.get("showId").getAsLong());
-                                show.setLanguage(obj.get("language").getAsString());
-                                show.setShowDate(LocalDate.parse(obj.get("showDate").getAsString()));
-                                show.setShowStartTime(LocalTime.parse(obj.get("showStartTime").getAsString()));
-                                show.setShowEndTime(LocalTime.parse(obj.get("showEndTime").getAsString()));
-                                show.setPrice(obj.get("price").getAsDouble());
-                                show.setEighteenPlus(obj.get("eighteenPlus").getAsBoolean());
+                                show.setShowId(
+                                        obj.get("showId").getAsLong());
+
+                                show.setLanguage(
+                                        obj.get("language").getAsString());
+
+                                show.setShowDate(
+                                        LocalDate.parse(
+                                                obj.get("showDate").getAsString()));
+
+                                show.setShowStartTime(
+                                        LocalTime.parse(
+                                                obj.get("showStartTime").getAsString()));
+
+                                show.setShowEndTime(
+                                        LocalTime.parse(
+                                                obj.get("showEndTime").getAsString()));
+
+                                show.setPrice(
+                                        obj.get("price").getAsDouble());
+
+                                show.setEighteenPlus(
+                                        obj.get("eighteenPlus").getAsBoolean());
 
                                 showList.add(show);
                             }
-                            Log.d("BOOK", "Shows = " + showList.size());
+
+                            Log.d("BOOK",
+                                    "Parsed shows = " + showList.size());
+
                             loadDates();
-                        } catch (Exception e) {
-                            Log.e("BOOK", "Exception while parsing", e);
+                        }
+                        catch (Exception e)
+                        {
+                            Log.e("BOOK",
+                                    "Exception while parsing",
+                                    e);
                         }
                     }
+
                     @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t)
+                    public void onFailure(Call<JsonObject> call,
+                                          Throwable t)
                     {
-                        Log.e("BOOK", "API FAILED", t);
-                        Toast.makeText(BookSeatActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        Log.e("BOOK",
+                                "API FAILED",
+                                t);
+
+                        Toast.makeText(BookSeatActivity.this,
+                                "Unable to connect to server",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -321,12 +408,13 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        }
+    }
 
     private void loadAlreadyBookedSeats(Long showId)
     {
+        String token = "Bearer " + manager.getToken();
         // Temporary hardcoded token
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbW9naEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzg1Mzc4OTg3LCJleHAiOjE3ODU0MTQ5ODd9.lvIg5mfBWCefAjctT-GkxpXOn8zyabClypdnLOwULoU";
+        String token1 = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbW9naEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzg1NDIwNzA2LCJleHAiOjE3ODU0NTY3MDZ9.qF6cLUHzFAcH5WggIqxpwxwPLQWx10POuLkw1VN-Vso";
 
         API.getApi()
                 .getBookingAPI()
@@ -425,8 +513,9 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
         ticket.setShowId(selectedShowId);
         ticket.setSeatIds(seatIds);
 
+        String token = "Bearer " + manager.getToken();
         // Temporary hardcoded token
-        String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbW9naEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzg1Mzc4OTg3LCJleHAiOjE3ODU0MTQ5ODd9.lvIg5mfBWCefAjctT-GkxpXOn8zyabClypdnLOwULoU";
+        String token2 = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbW9naEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzg1NDIwNzA2LCJleHAiOjE3ODU0NTY3MDZ9.qF6cLUHzFAcH5WggIqxpwxwPLQWx10POuLkw1VN-Vso";
 
         API.getApi()
                 .getBookingAPI()
@@ -448,12 +537,16 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
                             return;
                         }
+                        Intent intent = new Intent(BookSeatActivity.this, ConfirmBookingActivity.class);
 
-                        Toast.makeText(BookSeatActivity.this,
-                                "Booking Successful",
-                                Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+                        finish();
 
-                        loadBookedSeats(selectedShowId);
+//                        Toast.makeText(BookSeatActivity.this,
+//                                "Booking Successful",
+//                                Toast.LENGTH_SHORT).show();
+//
+//                        loadBookedSeats(selectedShowId);
                     }
 
                     @Override
@@ -463,7 +556,5 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        }
     }
-
-
+}

@@ -1,8 +1,8 @@
 package com.example.tikito.constants;
 
 public class AppConstants {
-  
-    public static final String BASE_URL = "http://172.24.120.230:8080/"; //YOUR_IP_ADDRESS
+
+    public static final String BASE_URL = "http://172.18.4.5:8080/"; //YOUR_IP_ADDRESS
 
     public static final String PREF_NAME = "TikitoPreferences";
 
@@ -19,5 +19,11 @@ public class AppConstants {
     public static final String ROLE = "role";
 
     public static final String IS_LOGGED_IN = "isLoggedIn";
+
+    public static final String RESPONSE_STATUS = "status";
+
+    public static final String SUCCESS_RESPONSE="success";
+
+    public static final String RESPONSE_DATA="data";
 
 }
