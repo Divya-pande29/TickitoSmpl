@@ -12,6 +12,5 @@ public class WebConfig implements WebMvcConfigurer {
         System.out.println("========== WEB CONFIG LOADED ==========");
         registry.addResourceHandler("/posters/**")
         .addResourceLocations("file:///D:/TickitoSmpl/Uploads/Posters/");
-    }
-
+    } 
 }

@@ -1,17 +1,19 @@
 package com.example.tikito.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Venue implements Serializable
 {
-    private String venueId;
+    private Long venueId;
     private String name;
     private String address;
     private boolean isAreFacilitiesAvailable;
     private Integer seatCapacity;
+    private List<SeatItem> seats;
 
 
-    public Venue(String venueId, String name, String address, boolean isAreFacilitiesAvailable, Integer seatCapacity) {
+    public Venue(Long venueId, String name, String address, boolean isAreFacilitiesAvailable, Integer seatCapacity) {
         this.venueId = venueId;
         this.name = name;
         this.address = address;
@@ -19,14 +21,23 @@ public class Venue implements Serializable
         this.seatCapacity = seatCapacity;
     }
 
+    public Venue(Long venueId, String name, String address, boolean isAreFacilitiesAvailable, Integer seatCapacity, List<SeatItem> seats) {
+        this.venueId = venueId;
+        this.name = name;
+        this.address = address;
+        this.isAreFacilitiesAvailable = isAreFacilitiesAvailable;
+        this.seatCapacity = seatCapacity;
+        this.seats = seats;
+    }
+
     public Venue() {
     }
 
-    public String getVenueId() {
+    public Long getVenueId() {
         return venueId;
     }
 
-    public void setVenueId(String venueId) {
+    public void setVenueId(Long venueId) {
         this.venueId = venueId;
     }
 
@@ -52,6 +63,14 @@ public class Venue implements Serializable
 
     public void setAreFacilitiesAvailable(boolean areFacilitiesAvailable) {
         isAreFacilitiesAvailable = areFacilitiesAvailable;
+    }
+
+    public List<SeatItem> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<SeatItem> seats) {
+        this.seats = seats;
     }
 
     public Integer getSeatCapacity() {

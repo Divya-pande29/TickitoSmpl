@@ -51,6 +51,7 @@ public class SecurityConfig
 		    .cors(cors -> { })
 			.authorizeHttpRequests(requests -> requests
 								   .requestMatchers("/tikito/auth/**","/tikito/user/register", "/tikito/user/forgot-password").permitAll()
+								   .requestMatchers(HttpMethod.GET,"/tikito/booking/admin/getAvailableSeats").hasAnyRole("USER", "ADMIN")
 								   .requestMatchers("/tikito/admin/register").permitAll()
 								   .requestMatchers("/tikito/booking/user/**").hasRole("USER")
 								   .requestMatchers("/tikito/booking/admin/**").hasRole("ADMIN")
@@ -64,6 +65,8 @@ public class SecurityConfig
 								   .requestMatchers("/tikito/shows", "/tikito/shows/*", "/tikito/shows/event/*", "/tikito/shows/date/*", "/tikito/shows/time/*").permitAll()
 								   .requestMatchers("/tikito/shows/admin/**").hasRole("ADMIN")
 								   .requestMatchers("/posters/**").permitAll()
+								   .requestMatchers("/profiles/**").permitAll()
+								   .requestMatchers("/tikito/upload/**").hasRole("USER")
 								   .anyRequest().authenticated())
 								   .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 								   .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

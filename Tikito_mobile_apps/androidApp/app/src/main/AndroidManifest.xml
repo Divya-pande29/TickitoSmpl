@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +16,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tikito"
         android:usesCleartextTraffic="true">
+
+        <activity android:name=".activities.SplashActivity"
+            android:exported="false"/>
+
+        <activity android:name=".activities.LoginActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:exported="false"/>
+
         <activity
             android:name=".activities.ShowActivity"
             android:exported="false" />
@@ -22,22 +45,18 @@
             android:exported="false" />
         <activity
             android:name=".activities.HomeActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.MovieActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.StageShowActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.BookSeatActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".activities.MovieActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".activities.StageShowActivity"-->
+<!--            android:exported="false" />-->
+<!--        <activity-->
+<!--            android:name=".activities.BookSeatActivity"-->
+<!--            android:exported="false" />-->
     </application>
 
 </manifest>

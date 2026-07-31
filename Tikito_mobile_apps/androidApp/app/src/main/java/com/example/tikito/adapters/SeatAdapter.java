@@ -28,6 +28,12 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.MyViewHolder>
         this.seatItemList = seatItemList;
     }
 
+    public void setSeatItems(List<SeatItem> seats)
+    {
+        this.seatItemList = seats;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,7 +44,11 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.MyViewHolder>
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         SeatItem s = seatItemList.get(position);
 
-        if(s.isSelected())
+        if(s.isBooked())
+        {
+            holder.txtSeatNo.setBackgroundResource(R.drawable.bg_booked);
+        }
+        else if(s.isSelected())
         {
             holder.txtSeatNo.setBackgroundResource(R.drawable.bg_selected);
         }
@@ -47,24 +57,35 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.MyViewHolder>
             holder.txtSeatNo.setBackgroundResource(R.drawable.bg_available);
         }
 
-
         holder.txtSeatNo.setText(s.getSeatNo());
 
         holder.itemView.setOnClickListener(v ->
         {
-            s.setSelected(!s.isSelected()); //toggle selection
-            List<SeatItem> selectedSeats = new ArrayList<>();
+            if(s.isBooked())
+                return;
 
-            for (SeatItem seat : seatItemList) {
-                if (seat.isSelected()) {
-                    selectedSeats.add(seat);
-                }
-            }
+            s.setSelected(!s.isSelected());
+
+            List<SeatItem> selectedSeats = getSelectedSeats();
 
             listener.onSeatSelectionChanged(selectedSeats);
 
             notifyItemChanged(holder.getAdapterPosition());
         });
+    }
+    private List<SeatItem> getSelectedSeats()
+    {
+        List<SeatItem> selectedSeats = new ArrayList<>();
+
+        for(SeatItem seat : seatItemList)
+        {
+            if(seat.isSelected())
+            {
+                selectedSeats.add(seat);
+            }
+        }
+
+        return selectedSeats;
     }
 
     @Override
@@ -81,7 +102,6 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.MyViewHolder>
             txtSeatNo = itemView.findViewById(R.id.txtSeatNo);
         }
     }
-
     public interface OnSeatSelectedListener
     {
         void onSeatSelectionChanged(List<SeatItem> selectedSeats);

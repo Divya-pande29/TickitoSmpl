@@ -49,6 +49,13 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
 
+    //okhttp3
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    //glide
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+
     //room persistence library api for local database
     val room_version = "2.8.4"
     implementation("androidx.room:room-runtime:${room_version}")

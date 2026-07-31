@@ -11,7 +11,7 @@ public interface UserService {
 	String updatePassword(Long userId, UserDto dto);
 	String forgotPassword(UserDto dto);
 	String deleteAccount(Long userId);
-	 //String uploadProfileImage(Long userId, MultipartFile image);
+	String updateProfileImage(Long userId, UserDto dto);
 }	
 //	String forgotPassword(String email,String newPassword);
 

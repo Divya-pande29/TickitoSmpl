@@ -29,7 +29,11 @@ public interface EventAPI {
             @Path("eventId") int eventId
     );
 
+<<<<<<< HEAD
     @GET("/tikito/events/count-by-type")
     Call<JsonObject> getEventCountByType();
 
 }
+=======
+}
+>>>>>>> 82bfc237437642899146271765517b2e4c6ba146

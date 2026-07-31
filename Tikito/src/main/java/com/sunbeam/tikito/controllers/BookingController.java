@@ -72,7 +72,7 @@ public class BookingController
 	}
 	
 	@GetMapping("/admin/getAvailableSeats")
-	@PreAuthorize("hasRole('ADMIN')")
+//	@PreAuthorize("hasRole('ADMIN')")
 	public Resp<?> getAllAvailableSeats(@RequestParam long showId)
 	{
 		List<AvailableSeatsDto> availableSeats = ser.getAllAvailableSeats(showId);
