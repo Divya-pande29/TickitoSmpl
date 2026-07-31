@@ -2,7 +2,6 @@ package com.example.tikito.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -14,7 +13,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tikito.R;
-import com.example.tikito.utils.Constants;
 
 public class SplashActivity extends AppCompatActivity {
     ImageView imageView;

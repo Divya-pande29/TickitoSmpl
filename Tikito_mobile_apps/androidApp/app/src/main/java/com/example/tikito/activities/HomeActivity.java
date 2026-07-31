@@ -2,6 +2,7 @@ package com.example.tikito.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -13,14 +14,18 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.tikito.R;
+import com.example.tikito.entities.ApiResponse;
+import com.example.tikito.entities.UserDto;
+import com.example.tikito.utils.API;
 import com.example.tikito.utils.SessionManager;
 
-public class HomeActivity extends AppCompatActivity {
-
-    Button btn, btnLogout  ;
 import com.example.tikito.fragments.HomeFragment;
 import com.example.tikito.fragments.ReviewFragment;
 import com.example.tikito.fragments.profile.ProfileFragment;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -30,29 +35,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        btn = findViewById(R.id.book);
-        btnLogout = findViewById(R.id.btnLogout);
-
-        btn.setOnClickListener(v ->
-        {
-            Intent intent = new Intent(this, BookSeatActivity.class);
-            startActivity(intent);
-        });
-
-        btnLogout.setOnClickListener(view -> {
-
-            // Clear saved session
-            SessionManager sessionManager = new SessionManager(HomeActivity.this);
-            sessionManager.logout();
-
-            // Go back to Login screen
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-
-            finish();
-
-        });
 
 
         navHome = findViewById(R.id.navHome);

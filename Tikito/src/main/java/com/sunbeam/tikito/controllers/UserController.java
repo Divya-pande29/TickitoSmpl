@@ -80,5 +80,16 @@ public class UserController {
                 userService.deleteAccount(
                         loggedInUser.getUserId()));
     }
+    
+    @PutMapping("/profile-image")
+    public Resp<?> updateProfileImage(
+            @RequestBody UserDto dto,
+            @AuthenticationPrincipal UserEntity loggedInUser) {
+
+        return Resp.success(
+                userService.updateProfileImage(
+                        loggedInUser.getUserId(),
+                        dto));
+    }
 }
 

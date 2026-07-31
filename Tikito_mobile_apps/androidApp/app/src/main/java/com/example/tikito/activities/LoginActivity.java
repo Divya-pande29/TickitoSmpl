@@ -82,8 +82,11 @@ public class LoginActivity extends AppCompatActivity {
 
         textForgotPassword.setOnClickListener(view -> {
 
-            // TODO
-            // Open Forgot Password Fragment
+            Intent intent = new Intent(
+                    LoginActivity.this,
+                    ForgotPasswordActivity.class);
+
+            startActivity(intent);
 
         });
 
@@ -125,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                 editPassword.getText().toString().trim()
         );
 
-        UserAPI userAPI = API.getApi().getUserAPI();
+        UserAPI userAPI = API.getApi(this).getUserAPI();
 
         userAPI.login(request).enqueue(new Callback<ApiResponse<LoginResponse>>() {
 

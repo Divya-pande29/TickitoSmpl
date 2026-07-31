@@ -17,16 +17,20 @@ public class FileUploadUtil {
     @Value("${upload.path}")
     private String uploadPath;
 
-    public String upload(MultipartFile file) throws IOException {
+    public String upload(MultipartFile file, String folder) throws IOException {
+    	
 
         String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-        Path path = Paths.get(uploadPath);
+        Path path = Paths.get(uploadPath, folder);
 
+        System.out.println("======== FILE UPLOAD UTIL CALLED ========");
+        System.out.println("Saving image to: " + path.resolve(filename));
+        
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }
-
+        System.out.println("Saving image to: " + path.resolve(filename).toAbsolutePath());
         Files.copy(
                 file.getInputStream(),
                 path.resolve(filename),
