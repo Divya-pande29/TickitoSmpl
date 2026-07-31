@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tikito.R;
 import com.example.tikito.entities.DateItem;
+import com.example.tikito.entities.TimeItem;
 
 import java.util.List;
 
@@ -20,9 +21,25 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.MyViewHolder>
     Context context;
     List<DateItem> dateItemList;
 
-    public DateAdapter(Context context, List<DateItem> dateItemList) {
+    public void setDateItems(List<DateItem> dateItems) {
+        this.dateItemList = dateItems;
+        selectedPosition = RecyclerView.NO_POSITION;
+        notifyDataSetChanged();
+    }
+
+    public void setSelectedPosition(int position)
+    {
+        selectedPosition = position;
+        notifyDataSetChanged();
+    }
+    OnDateClickListener listener;
+    private int selectedPosition = RecyclerView.NO_POSITION;
+
+
+    public DateAdapter(Context context, List<DateItem> dateItemList, OnDateClickListener listener) {
         this.context = context;
         this.dateItemList = dateItemList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,10 +55,27 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.MyViewHolder>
 
         holder.txtDate.setText(d.getDate());
 
+        if(position == selectedPosition)
+        {
+            holder.itemView.setBackgroundResource(R.drawable.bg_selected_datetime);
+        }
+        else
+        {
+            holder.itemView.setBackgroundResource(R.drawable.bg_normal_datetime);
+        }
+
 
         holder.itemView.setOnClickListener(v ->
         {
-            Toast.makeText(context, d.getDate() + " selected", Toast.LENGTH_SHORT).show();
+            int previousPosition = selectedPosition;
+            selectedPosition = holder.getAdapterPosition();
+
+            if(previousPosition != RecyclerView.NO_POSITION)
+                notifyItemChanged(previousPosition);
+
+            notifyItemChanged(selectedPosition);
+
+            listener.onDateClicked(d);
         });
     }
 
@@ -58,5 +92,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.MyViewHolder>
 
             txtDate = itemView.findViewById(R.id.txtDate);
         }
+    }
+
+    public interface OnDateClickListener
+    {
+        void onDateClicked(DateItem dateItem);
     }
 }
