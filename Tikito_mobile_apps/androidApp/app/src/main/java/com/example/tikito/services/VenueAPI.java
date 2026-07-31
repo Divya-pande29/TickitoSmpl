@@ -8,6 +8,6 @@ import retrofit2.http.Path;
 
 public interface VenueAPI
 {
-    @GET("venue/{venueId}")
+    @GET("tikito/venue/{venueId}")
     Call<JsonObject> getVenueById(@Path("venueId") long venueId);
 }
