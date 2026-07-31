@@ -12,7 +12,7 @@ import com.sunbeam.tikito.utils.*;
 import com.sunbeam.tikito.services.UploadService;
 
 @RestController
-@RequestMapping("/upload")
+@RequestMapping("/tikito/upload")
 public class UploadController {
 
     private final UploadService uploadService;
@@ -28,12 +28,32 @@ public class UploadController {
             @RequestParam("file") MultipartFile file)
             throws IOException {
 
-        String url = uploadService.uploadPoster(file);
+    	String filename = uploadService.uploadPoster(file);
 
-        Map<String, String> response = new HashMap<>();
-        response.put("posterUrl", url);
+    	Map<String, String> response = new HashMap<>();
 
-        return Resp.success(response);
+    	response.put("fileName", filename);
+    	response.put("posterUrl", "/posters/" + filename);
+
+    	return Resp.success(response);
+    }
+    
+    @PostMapping(
+            value = "/profile",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public Resp<?> uploadProfile(
+            @RequestParam("file") MultipartFile file)
+            throws IOException {
+
+    	String filename = uploadService.uploadProfile(file);
+
+    	Map<String, String> response = new HashMap<>();
+
+    	response.put("fileName", filename);
+    	response.put("profileUrl", "/profiles/" + filename);
+
+    	return Resp.success(response);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.sunbeam.tikito.serviceimpl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -215,24 +216,28 @@ public class BookingServiceImpl implements BookingService
 	public UserBookingDto getBookingsByUser(long bookingId, long userId) 
 	{
 		UserBookingDto bookingDetails = new UserBookingDto();
-		BookingEntity booking = bookingDao.findByBookingIdAndUserUserId(bookingId, userId)
+		BookingEntity b = bookingDao.findByBookingIdAndUserUserId(bookingId, userId)
 			              				  .orElseThrow(() -> new InvalidBookingException("Booking unavailable"));
 		
 		List<String> seatNums = new ArrayList<>();
-		List<BookedSeatsEntity> seats = booking.getBookedSeats();
+		List<BookedSeatsEntity> seats = b.getBookedSeats();
 		for(BookedSeatsEntity bs : seats)
 		{
 			seatNums.add(bs.getSeat().getSeatNo());
 		}
 		
-		bookingDetails = new UserBookingDto(booking.getBookingId(), 
-											booking.getShow().getShowId(), 
-											booking.getTotalAmt(), 
-											seatNums, 
-											booking.getPaymentStatus(), 
-											booking.getBookingStatus(), 
-											booking.getCreatedAt());
-		
+		bookingDetails = new UserBookingDto(b.getBookingId(), 
+				b.getShow().getShowId(),
+				b.getShow().getEvent().getEventName(),
+				b.getShow().getVenue().getName(),
+				b.getShow().getShowDate(),
+				b.getShow().getShowStartTime(),
+				b.getShow().getShowEndTime(),
+				b.getTotalAmt(), 
+				seatNums, 
+				b.getPaymentStatus(), 
+				b.getBookingStatus(), 
+				b.getCreatedAt());
 		return bookingDetails;
 	}
 
@@ -253,7 +258,12 @@ public class BookingServiceImpl implements BookingService
 			}
 			
 			bookingDetails = new UserBookingDto(b.getBookingId(), 
-												b.getShow().getShowId(), 
+												b.getShow().getShowId(),
+												b.getShow().getEvent().getEventName(),
+												b.getShow().getVenue().getName(),
+												b.getShow().getShowDate(),
+												b.getShow().getShowStartTime(),
+												b.getShow().getShowEndTime(),
 												b.getTotalAmt(), 
 												seatNums, 
 												b.getPaymentStatus(), 
@@ -265,6 +275,8 @@ public class BookingServiceImpl implements BookingService
 		
 		return bookingList;
 	}
+	
+	
 
 	@Override
 	public List<AllBookingsDto> getAllBookingsByShow(long showId) 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
@@ -14,11 +14,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/movie_poster"
                 android:id="@+id/movieposter"/>
@@ -26,13 +26,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_margin="10dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:text="Booking Id: "
+                    android:id="@+id/bookingId"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -44,14 +46,40 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Amount: "
+                    android:text="Movie: "
+                    android:id="@+id/Movie"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/venue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Venue: "
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Seat Numbers: "
+                    android:text="Date: "
+                    android:id="@+id/date"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Seats:  "
+                    android:id="@+id/seats"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Amount: "
+                    android:id="@+id/amount"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -64,13 +92,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Payment Status: "
+                        android:id="@+id/payStat"
                         android:textSize="15sp"
                         android:textStyle="bold"/>
 
                     <ImageView
+                        android:id="@+id/paymentImage"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/successful"/>
+                        android:layout_height="match_parent"
+                        android:src="@drawable/successful" />
 
                 </LinearLayout>
 
@@ -83,23 +113,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="BookingStatus: "
+                        android:id="@+id/BookingStat"
                         android:textSize="15sp"
                         android:textStyle="bold"/>
 
                     <ImageView
+                        android:id="@+id/bookingImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/cancel"/>
 
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:text="Booking Date: "
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+
 
 
             </LinearLayout>

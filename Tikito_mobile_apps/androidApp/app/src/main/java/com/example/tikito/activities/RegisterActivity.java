@@ -133,7 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                 editPhone.getText().toString().trim()
         );
 
-        API.getApi()
+        API.getApi(this)
                 .getUserAPI()
                 .register(user)
                 .enqueue(new Callback<ApiResponse<UserDto>>() {

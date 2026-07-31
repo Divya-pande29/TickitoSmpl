@@ -25,6 +25,10 @@ public class UserDto {
         this.phone = phone;
     }
 
+    public UserDto() {
+
+    }
+
     public Integer getUserId() {
         return userId;
     }
