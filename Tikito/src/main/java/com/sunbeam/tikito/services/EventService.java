@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sunbeam.tikito.dto.EventRequestDto;
 import com.sunbeam.tikito.dto.EventResponseDto;
+import com.sunbeam.tikito.dto.EventTypeCountDto;
 
 public interface EventService {
 
@@ -22,4 +23,5 @@ public interface EventService {
 	  public List<EventResponseDto> findByEventType(String eventType);
 	  
 	  public List<EventResponseDto> findByDuration( Long duration);
+	  public List<EventTypeCountDto> getEventCountByType();
 }
