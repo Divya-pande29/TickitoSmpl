@@ -15,5 +15,5 @@ public interface ShowDao extends JpaRepository<ShowEntity, Long> {
 	List<ShowEntity> findByShowDate(LocalDate showDate);
 
 	List<ShowEntity> findByShowStartTime(LocalTime showStartTime);
-
+	List<ShowEntity> findByEvent_EventId(Long eventId);
 }

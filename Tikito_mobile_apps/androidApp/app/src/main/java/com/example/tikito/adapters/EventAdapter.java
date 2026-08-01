@@ -69,8 +69,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
                 .into(holder.imgPoster);
         holder.btnBook.setOnClickListener(v -> {
             Intent intent = new Intent(context, ShowActivity.class);
+            intent.putExtra("eventId", event.getEventId());
             intent.putExtra("eventName", event.getEventName());
-            intent.putExtra("posterUrl", event.getPosterUrl());
+            intent.putExtra("ImageUrl", imageUrl);
 
             context.startActivity(intent);
 

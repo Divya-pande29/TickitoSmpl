@@ -97,7 +97,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         dto.setEmail(editEmail.getText().toString().trim());
         dto.setNewPassword(editNewPassword.getText().toString().trim());
 
-        API.getApi(this)
+        API.getApi(this )
                 .getUserAPI()
                 .forgotPassword(dto)
                 .enqueue(new Callback<ApiResponse<String>>() {

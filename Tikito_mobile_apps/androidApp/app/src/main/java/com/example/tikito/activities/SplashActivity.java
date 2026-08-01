@@ -13,6 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.tikito.R;
+import com.example.tikito.constants.AppConstants;
 
 public class SplashActivity extends AppCompatActivity {
     ImageView imageView;
@@ -32,11 +33,11 @@ public class SplashActivity extends AppCompatActivity {
         new Thread(()->{
            try {
                 Thread.sleep(5000);
-                //if(getSharedPreferences(Constants.PREFERENCE_FILE_NAME,MODE_PRIVATE)
-                        //.getBoolean(Constants.PREFERENCE_KEY_LOGIN_STATUS,false))
+                if(getSharedPreferences(AppConstants.PREFERENCE_FILE_NAME,MODE_PRIVATE)
+                        .getBoolean(AppConstants.PREFERENCE_KEY_LOGIN_STATUS,false))
                     startActivity(new Intent(this, HomeActivity.class));
-                //else
-                    //startActivity(new Intent(this, LoginActivity.class));
+                else
+                    startActivity(new Intent(this, LoginActivity.class));
 
                 finish();
             } catch (InterruptedException e) {
