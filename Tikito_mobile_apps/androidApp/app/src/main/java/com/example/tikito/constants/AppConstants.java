@@ -27,4 +27,3 @@ public class AppConstants {
     public static final String RESPONSE_DATA="data";
 
 }
-}

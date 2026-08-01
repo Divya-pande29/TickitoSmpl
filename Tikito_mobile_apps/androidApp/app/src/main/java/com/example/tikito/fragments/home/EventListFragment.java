@@ -16,14 +16,15 @@ import android.widget.Toast;
 
 import com.example.tikito.R;
 import com.example.tikito.adapters.EventTypeAdapter;
-import com.example.tikito.entities.Event;
+import com.example.tikito.constants.AppConstants;
+
 import com.example.tikito.entities.EventType;
 import com.example.tikito.utils.API;
-import com.example.tikito.utils.Constants;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.json.JSONArray;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class EventListFragment extends Fragment {
 
         eventTypeList = new ArrayList<>();
 
-        API.getApi()
+        API.getApi(requireContext())
                 .getEventAPI()
                 .getEventCountByType()
                 .enqueue(new Callback<JsonObject>() {
@@ -58,12 +59,12 @@ public class EventListFragment extends Fragment {
                             Log.d("API", response.body().toString());
                             JsonObject responseBody = response.body();
 
-                            if (responseBody.get(Constants.RESPONSE_STATUS)
+                            if (responseBody.get(AppConstants.RESPONSE_STATUS)
                                     .getAsString()
-                                    .equals(Constants.SUCCESS_RESPONSE)) {
+                                    .equals(AppConstants.SUCCESS_RESPONSE)) {
 
                                 JsonArray jsonArray =
-                                        responseBody.getAsJsonArray(Constants.RESPONSE_DATA);
+                                        responseBody.getAsJsonArray(AppConstants.RESPONSE_DATA);
 
                                 for (JsonElement element : jsonArray) {
 
