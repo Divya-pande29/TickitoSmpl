@@ -17,7 +17,7 @@
             android:textSize="12sp"
             android:id="@+id/txtTime"
             android:textStyle="bold"
-            android:background="#FFECB8"/>
+            android:background="#FFEB3B"/>
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>

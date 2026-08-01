@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.tikito.R;
+import com.example.tikito.activities.BookSeatActivity;
+import com.example.tikito.activities.HomeActivity;
+import com.example.tikito.activities.TicketHistoryActivity;
+import com.example.tikito.activities.UpcomingTicketsActivity;
 import com.example.tikito.activities.LoginActivity;
 import com.example.tikito.entities.ApiResponse;
 import com.example.tikito.entities.UserDto;
@@ -36,6 +41,7 @@ public class ProfileFragment extends Fragment {
     private ShapeableImageView imgProfile;
     private TextView textUserName;
 
+    Button booking;
     private SessionManager sessionManager;
 
     public ProfileFragment() {
@@ -90,6 +96,7 @@ public class ProfileFragment extends Fragment {
 
     private void initViews(View view) {
 
+        booking = view.findViewById(R.id.booking);
         btnLogout = view.findViewById(R.id.btnLogout);
 
         textUserName = view.findViewById(R.id.textUserName);
@@ -105,10 +112,16 @@ public class ProfileFragment extends Fragment {
 
 
         cardCurrentBookings.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Current Bookings", Toast.LENGTH_SHORT).show());
+        {
+            Intent intent = new Intent(requireContext(), UpcomingTicketsActivity.class);
+            startActivity(intent);
+        });
 
         cardHistory.setOnClickListener(v ->
-                Toast.makeText(getContext(), "Booking History", Toast.LENGTH_SHORT).show());
+        {
+            Intent intent = new Intent(requireContext(), TicketHistoryActivity.class);
+            startActivity(intent);
+        });
 
         cardUpdateProfile.setOnClickListener(v -> {
 
@@ -136,6 +149,12 @@ public class ProfileFragment extends Fragment {
 
             requireActivity().finish();
 
+        });
+
+        booking.setOnClickListener(v ->
+        {
+            Intent intent = new Intent(requireContext(), BookSeatActivity.class);
+            startActivity(intent);
         });
 
     }

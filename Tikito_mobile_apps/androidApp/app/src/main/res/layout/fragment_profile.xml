@@ -182,6 +182,16 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!--Temporary Button-->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Book Seats"
+            android:id="@+id/booking"
+            android:backgroundTint="#FFC107"
+            android:textColor="@color/black"/>
+
     </LinearLayout>
 
 </ScrollView>

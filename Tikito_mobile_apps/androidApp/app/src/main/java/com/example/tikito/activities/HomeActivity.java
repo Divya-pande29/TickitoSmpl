@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.tikito.R;
+
 import com.example.tikito.fragments.home.EventListFragment;
+
 import com.example.tikito.fragments.profile.ProfileFragment;
 
 public class HomeActivity extends AppCompatActivity {

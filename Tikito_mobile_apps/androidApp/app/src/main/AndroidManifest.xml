@@ -16,6 +16,63 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tikito"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activities.ConfirmBookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.TicketDetailsActivity"
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".activities.DummyActivity" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+        <activity
+            android:name=".activities.TicketHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ItemCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FragmentReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FragmentHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.UpcomingTicketsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".activities.MovieActivity" -->
+        <!-- android:exported="false"/> -->
+        <!-- <activity -->
+        <!-- android:name=".activities.StageShowActivity" -->
+        <!-- android:exported="false" /> -->
+        <activity
+            android:name=".activities.BookSeatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ItemCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FragmentReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FragmentHomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.SplashActivity"
 
         <activity android:name=".activities.LoginActivity"
             android:exported="false"/>
@@ -31,9 +88,6 @@
 
         </activity>
         <activity
-            android:name=".activities.RegisterActivity"
-            android:exported="false"/>
-        <activity
             android:name=".activities.ForgotPasswordActivity"
             android:exported="false"/>
 
@@ -43,11 +97,7 @@
         <activity
             android:name=".activities.EventActivity"
             android:exported="false" />
-        <activity
-            android:name=".activities.HomeActivity"
-            android:exported="false">
-
-        </activity>
+       
 <!--        <activity-->
 <!--            android:name=".activities.MovieActivity"-->
 <!--            android:exported="false" />-->
