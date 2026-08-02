@@ -54,7 +54,7 @@ public class EventActivity extends AppCompatActivity {
 
     private void loadEvents(String eventType) {
 
-        API.getApi()
+        API.getApi(this)
                 .getEventAPI()
                 .getEventsByType(eventType)
                 .enqueue(new Callback<ApiResponse<List<Event>>>() {

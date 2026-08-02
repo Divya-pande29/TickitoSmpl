@@ -65,10 +65,10 @@
         <activity
             android:name=".activities.SplashActivity"
 
-        <activity android:name=".activities.SplashActivity"
+        <activity android:name=".activities.LoginActivity"
             android:exported="false"/>
 
-        <activity android:name=".activities.LoginActivity"
+        <activity android:name=".activities.SplashActivity"
             android:exported="true">
 
             <intent-filter>

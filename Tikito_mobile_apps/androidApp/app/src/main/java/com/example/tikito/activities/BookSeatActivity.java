@@ -170,7 +170,7 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
         showList.clear();
 
-        API.getApi()
+        API.getApi(this)
                 .getShowAPI()
                 .findShowByEvent(event.getEventId())
                 .enqueue(new Callback<JsonObject>()

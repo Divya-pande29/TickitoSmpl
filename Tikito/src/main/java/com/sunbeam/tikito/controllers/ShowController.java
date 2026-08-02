@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.sunbeam.tikito.dto.ShowDto;
+import com.sunbeam.tikito.dto.VenueShowsDto;
 import com.sunbeam.tikito.entity.ShowEntity;
 import com.sunbeam.tikito.serviceimpl.ShowServiceImpl;
 import com.sunbeam.tikito.utils.Resp;
@@ -36,14 +38,14 @@ public class ShowController {
 
 		return Resp.success(show);
 	}
-
-	@GetMapping("/event/{eventId}")
-	public Resp<?> findShowByEvent(@PathVariable Long eventId) {
-
-		List<ShowEntity> list = showServiceImpl.findByEvent(eventId);
-
-		return Resp.success(list);
-	}
+//
+//	@GetMapping("/event/{eventId}")
+//	public Resp<?> findShowByEvent(@PathVariable Long eventId) {
+//
+//		List<ShowEntity> list = showServiceImpl.findByEvent(eventId);
+//
+//		return Resp.success(list);
+//	}
 
 	@GetMapping("/date/{showDate}")
 	public Resp<?> findByDate(@PathVariable LocalDate showDate) {
@@ -85,5 +87,18 @@ public class ShowController {
 		showServiceImpl.deleteShowById(showId);
 
 		return Resp.success("Show deleted successfully");
+	
+	}
+	
+	@GetMapping("/event/{eventId}")
+	public ResponseEntity<?> getShowsByEvent(
+	        @PathVariable Long eventId) {
+
+	    List<VenueShowsDto> result =
+	            showServiceImpl.getShowsByEvent(eventId);
+
+	    return ResponseEntity.ok(
+	            Resp.success(result)
+	    );
 	}
 }

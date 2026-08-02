@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                 editPassword.getText().toString().trim()
         );
 
-        UserAPI userAPI = API.getApi(this).getUserAPI();
+        UserAPI userAPI = API.getApi(this ).getUserAPI();
 
         userAPI.login(request).enqueue(new Callback<ApiResponse<LoginResponse>>() {
 

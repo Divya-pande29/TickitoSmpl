@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import com.sunbeam.tikito.dto.ShowDto;
+import com.sunbeam.tikito.dto.VenueShowsDto;
 import com.sunbeam.tikito.entity.ShowEntity;
 
 public interface ShowService {
@@ -25,4 +26,9 @@ public interface ShowService {
 
 	public List<ShowEntity> findByTime(LocalTime showStartTime);
 
+	
+
+	public List<VenueShowsDto> getShowsByEvent(Long eventId);
+
+	
 }
