@@ -40,12 +40,9 @@ public class TicketDetailsActivity extends AppCompatActivity
 
         txtDate.setText(booking.getShowDate().toString());
 
-        txtTime.setText(
-                booking.getShowStartTime() + " - " +
-                        booking.getShowEndTime());
+        txtTime.setText(booking.getShowStartTime() + " - " + booking.getShowEndTime());
 
-        txtSeats.setText(
-                TextUtils.join(", ", booking.getSeatNumbers()));
+        txtSeats.setText(TextUtils.join(", ", booking.getSeatNumbers()));
 
         txtAmt.setText("₹ " + booking.getTotalAmt());
 

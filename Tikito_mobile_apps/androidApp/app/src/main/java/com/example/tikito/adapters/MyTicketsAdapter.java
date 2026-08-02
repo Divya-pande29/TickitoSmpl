@@ -58,9 +58,15 @@ public class MyTicketsAdapter extends RecyclerView.Adapter<MyTicketsAdapter.MyVi
         holder.date.setText(""+bookingHistory.getShowDate());
 
         List<String> seatNumbers = bookingHistory.getSeatNumbers();
-        String seats = String.join(", ", seatNumbers);
-
-        holder.seats.setText(seats);
+        if (seatNumbers == null || seatNumbers.isEmpty())
+        {
+            holder.seats.setVisibility(View.GONE);
+        }
+        else
+        {
+            holder.seats.setVisibility(View.VISIBLE);
+            holder.seats.setText(String.join(", ", seatNumbers));
+        }
         holder.amount.setText(""+ bookingHistory.getTotalAmt());
 
         setStatus(holder, bookingHistory);
