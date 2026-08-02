@@ -17,7 +17,6 @@ import com.example.tikito.constants.AppConstants;
 import com.example.tikito.entities.ApiResponse;
 import com.example.tikito.entities.BookingHistory;
 import com.example.tikito.utils.API;
-import com.example.tikito.utils.Constants;
 import com.example.tikito.utils.SessionManager;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -89,9 +88,7 @@ public class UpcomingTicketsActivity extends AppCompatActivity implements MyTick
 
     private void cancelBooking(Long bookingId)
     {
-        String token = "Bearer " + manager.getToken();
-        String token1 = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbW9naEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzg1NDIyNjgzLCJleHAiOjE3ODU0NTg2ODN9.qPpRjrJ-w_M2LpTzwSyOStBmwNAippnUi51-aezXgrY";
-        API.getApi().getBookingAPI().cancelBooking(token, bookingId).enqueue(new Callback<JsonObject>()
+        API.getApi(this).getBookingAPI().cancelBooking(bookingId).enqueue(new Callback<JsonObject>()
         {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
@@ -114,11 +111,7 @@ public class UpcomingTicketsActivity extends AppCompatActivity implements MyTick
     }
     private void loadBookings()
     {
-        String token = "Bearer " + manager.getToken();
-
-        String token2 = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbW9naEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzg1NDIyNjgzLCJleHAiOjE3ODU0NTg2ODN9.qPpRjrJ-w_M2LpTzwSyOStBmwNAippnUi51-aezXgrY";
-
-        API.getApi().getBookingAPI().getMyBookings(token).enqueue(new Callback<JsonObject>()
+        API.getApi(this).getBookingAPI().getMyBookings().enqueue(new Callback<JsonObject>()
         {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response)

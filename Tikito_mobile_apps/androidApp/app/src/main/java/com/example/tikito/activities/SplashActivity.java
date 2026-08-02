@@ -31,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
         Animation animation = AnimationUtils.loadAnimation(this,R.anim.splash);
         imageView.startAnimation(animation);
         new Thread(()->{
-           try {
+            try {
                 Thread.sleep(5000);
                 if(getSharedPreferences(AppConstants.PREFERENCE_FILE_NAME,MODE_PRIVATE)
                         .getBoolean(AppConstants.PREFERENCE_KEY_LOGIN_STATUS,false))

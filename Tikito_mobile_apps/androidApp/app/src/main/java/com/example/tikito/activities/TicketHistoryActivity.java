@@ -76,11 +76,7 @@ public class TicketHistoryActivity extends AppCompatActivity implements MyTicket
 
     private void loadBookings()
     {
-        String token = "Bearer " + manager.getToken();
-
-        String token1 = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbW9naEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzg1NDIyNjgzLCJleHAiOjE3ODU0NTg2ODN9.qPpRjrJ-w_M2LpTzwSyOStBmwNAippnUi51-aezXgrY";
-
-        API.getApi().getBookingAPI().getMyBookings(token).enqueue(new Callback<JsonObject>()
+        API.getApi(this).getBookingAPI().getMyBookings().enqueue(new Callback<JsonObject>()
         {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response)

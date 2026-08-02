@@ -366,7 +366,7 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
     private void loadVenueSeats() {
         seats.clear();
 
-        API.getApi().getVenueAPI().getVenueById(venueId)
+        API.getApi(this).getVenueAPI().getVenueById(venueId)
                 .enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -412,13 +412,9 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
     private void loadAlreadyBookedSeats(Long showId)
     {
-        String token = "Bearer " + manager.getToken();
-        // Temporary hardcoded token
-        String token1 = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbW9naEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzg1NDIwNzA2LCJleHAiOjE3ODU0NTY3MDZ9.qF6cLUHzFAcH5WggIqxpwxwPLQWx10POuLkw1VN-Vso";
-
-        API.getApi()
+        API.getApi(this)
                 .getBookingAPI()
-                .getAvailableSeats(token, showId)
+                .getAvailableSeats(showId)
                 .enqueue(new Callback<JsonObject>()
                 {
                     @Override
@@ -513,13 +509,9 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
         ticket.setShowId(selectedShowId);
         ticket.setSeatIds(seatIds);
 
-        String token = "Bearer " + manager.getToken();
-        // Temporary hardcoded token
-        String token2 = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbW9naEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzg1NDIwNzA2LCJleHAiOjE3ODU0NTY3MDZ9.qF6cLUHzFAcH5WggIqxpwxwPLQWx10POuLkw1VN-Vso";
-
-        API.getApi()
+        API.getApi(this)
                 .getBookingAPI()
-                .bookTicket(token, ticket)
+                .bookTicket(ticket)
                 .enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call,
