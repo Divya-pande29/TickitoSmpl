@@ -63,15 +63,6 @@
             android:name=".activities.BookSeatActivity"
             android:exported="false" />
         <activity
-            android:name=".ItemCategoryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".FragmentReviewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".FragmentHomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.SplashActivity"
 
         <activity android:name=".activities.SplashActivity"
