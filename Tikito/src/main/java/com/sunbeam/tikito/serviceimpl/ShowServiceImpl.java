@@ -160,6 +160,7 @@ public class ShowServiceImpl implements ShowService {
 	        ShowTimingDto timing = new ShowTimingDto();
 
 	        timing.setShowId(show.getShowId());
+	        timing.setShowDate(show.getShowDate());
 	        timing.setShowStartTime(show.getShowStartTime());
 	        timing.setShowEndTime(show.getShowEndTime());
 	        timing.setPrice(show.getPrice());
