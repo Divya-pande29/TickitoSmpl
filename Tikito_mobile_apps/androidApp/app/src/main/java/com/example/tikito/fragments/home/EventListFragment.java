@@ -17,14 +17,13 @@ import android.widget.Toast;
 import com.example.tikito.R;
 import com.example.tikito.adapters.EventTypeAdapter;
 import com.example.tikito.constants.AppConstants;
-
+import com.example.tikito.entities.Event;
 import com.example.tikito.entities.EventType;
 import com.example.tikito.utils.API;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tikito.R;
 //import com.example.tikito.activities.BookingActivity;
+import com.example.tikito.activities.BookSeatActivity;
 import com.example.tikito.entities.ShowTiming;
 import com.example.tikito.entities.VenueShows;
 import com.google.android.flexbox.FlexboxLayout;
@@ -28,10 +29,17 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     private final Context context;
     private final List<VenueShows> venueList;
+    private Long eventId;
+    private String eventName;
+    private String imgUrl;
 
-    public ShowAdapter(Context context, List<VenueShows> venueList) {
+    public ShowAdapter(Context context, List<VenueShows> venueList, Long eventId, String eventName, String imgUrl)
+    {
         this.context = context;
         this.venueList = venueList;
+        this.eventId = eventId;
+        this.eventName = eventName;
+        this.imgUrl = imgUrl;
     }
 
     @NonNull
@@ -60,42 +68,43 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
         holder.layoutTimings.removeAllViews();
 
-        for (ShowTiming show : venue.getShows()) {
+        // Create single Book Seats button
+        Button bookButton = new Button(context);
 
-            Button timingButton = new Button(context);
+        bookButton.setText("Book Seats");
+        bookButton.setTextColor(Color.BLACK);
+        bookButton.setTextSize(16);
 
-            timingButton.setText(show.getShowStartTime());
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(Color.parseColor("#FFC107"));
+        drawable.setCornerRadius(40);
 
-            timingButton.setTextColor(Color.BLACK);
-            timingButton.setTextSize(14);
+        bookButton.setBackground(drawable);
 
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setColor(Color.parseColor("#FFC107"));
-            drawable.setCornerRadius(40);
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
 
-            timingButton.setBackground(drawable);
+        params.setMargins(10, 10, 10, 10);
+        bookButton.setLayoutParams(params);
 
-            LinearLayout.LayoutParams params =
-                    new LinearLayout.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT);
+        bookButton.setOnClickListener(v -> {
 
-            params.setMargins(10,10,10,10);
+            Intent intent = new Intent(context, BookSeatActivity.class);
 
-            timingButton.setLayoutParams(params);
+            intent.putExtra("eventId", eventId);
+            intent.putExtra("eventName", eventName);
+            intent.putExtra("posterUrl", imgUrl);
 
-            timingButton.setOnClickListener(v -> {
+            intent.putExtra("venueId", venue.getVenueId());
+            intent.putExtra("venueName", venue.getVenueName());
+            intent.putExtra("venueAddress", venue.getAddress());
 
-                //Intent intent = new Intent(context, BookingActivity.class);
+            context.startActivity(intent);
+        });
 
-                //intent.putExtra("showId", show.getShowId());
-                //intent.putExtra("venueId", venue.getVenueId());
-
-                //context.startActivity(intent);
-            });
-
-            holder.layoutTimings.addView(timingButton);
-        }
+        holder.layoutTimings.addView(bookButton);
     }
 
     @Override

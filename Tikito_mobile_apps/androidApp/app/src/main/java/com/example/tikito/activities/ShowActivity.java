@@ -50,17 +50,18 @@ public class ShowActivity extends AppCompatActivity {
         txtEventName = findViewById(R.id.txtEventName);
         recyclerVenues = findViewById(R.id.recyclerVenues);
 
-        showList = new ArrayList<>();
-        adapter = new ShowAdapter(this, showList);
-
-        recyclerVenues.setLayoutManager(new LinearLayoutManager(this));
-        recyclerVenues.setAdapter(adapter);
-
         eventId = getIntent().getLongExtra("eventId",0);
         Log.d("SHOW_DEBUG", "EventId = " + eventId);
         Toast.makeText(this, "EventId = " + eventId, Toast.LENGTH_LONG).show();
         eventName = getIntent().getStringExtra("eventName");
         imageUrl = getIntent().getStringExtra("ImageUrl");
+
+
+        showList = new ArrayList<>();
+        adapter = new ShowAdapter(this, showList, eventId, eventName, imageUrl);
+
+        recyclerVenues.setLayoutManager(new LinearLayoutManager(this));
+        recyclerVenues.setAdapter(adapter);
 
         txtEventName.setText(eventName);
 
@@ -83,12 +84,27 @@ public class ShowActivity extends AppCompatActivity {
                             Call<ApiResponse<List<VenueShows>>> call,
                             Response<ApiResponse<List<VenueShows>>> response) {
                         Log.d("SHOW_DEBUG", "HTTP Code = " + response.code());
-                        if(response.isSuccessful()
-                                && response.body()!=null
+                        if(response.isSuccessful() && response.body()!=null
                                 && response.body().getStatus().equals(AppConstants.SUCCESS_RESPONSE)){
 
+                            List<VenueShows> data = response.body().getData();
+
+                            for (VenueShows venue : data) {
+
+                                Log.d("SHOW_DEBUG", "====================");
+                                Log.d("SHOW_DEBUG", "Venue = " + venue.getVenueName());
+                                Log.d("SHOW_DEBUG", "Address = " + venue.getAddress());
+                                Log.d("SHOW_DEBUG", "Shows object = " + venue.getShows());
+
+                                if (venue.getShows() != null) {
+                                    Log.d("SHOW_DEBUG", "Shows size = " + venue.getShows().size());
+                                } else {
+                                    Log.d("SHOW_DEBUG", "Shows is NULL");
+                                }
+                            }
+
                             showList.clear();
-                            showList.addAll(response.body().getData());
+                            showList.addAll(data);
 
                             adapter.notifyDataSetChanged();
 
