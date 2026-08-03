@@ -97,33 +97,42 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
         recyclerViewSeats.setAdapter(seatAdapter);
         recyclerViewSeats.setLayoutManager(new GridLayoutManager(this, 5));
 
-        Event SelectedEvent = (Event) getIntent().getSerializableExtra("event");
-        Show SelectedShow = (Show) getIntent().getSerializableExtra("show");
-        Venue SelectedVenue = (Venue) getIntent().getSerializableExtra("venue");
+        Intent intent = getIntent();
 
-        Event event = new Event();
-        event.setEventId(1L);
-        event.setEventName("Avengers Endgame IMAX");
-        event.setEventType("Movie");
-        event.setEventDescription("SuperHero Action Movie");
-        event.setEventDurationMin(189L);
-        event.setAgeRestriction(13);
-        event.setPosterUrl("postername.url");
+        long eventId = intent.getLongExtra("eventId",0);
 
-        Venue venue = new Venue();
-        venue.setVenueId(2L);
-        venue.setName("INOX VJ Happiness");
-        venue.setAddress(" Hinjewadi P2, Pune");
-        venue.setAreFacilitiesAvailable(true);
+        String eventName = intent.getStringExtra("eventName");
+        String posterUrl = intent.getStringExtra("posterUrl");
 
-        venueId = venue.getVenueId();
+        venueId = intent.getLongExtra("venueId",0);
+
+        String venueName = intent.getStringExtra("venueName");
+        String venueAddress = intent.getStringExtra("venueAddress");
+
+//        Event event = new Event();
+//        event.setEventId(1L);
+//        event.setEventName("Avengers Endgame IMAX");
+//        event.setEventType("Movie");
+//        event.setEventDescription("SuperHero Action Movie");
+//        event.setEventDurationMin(189L);
+//        event.setAgeRestriction(13);
+//        event.setPosterUrl("postername.url");
+//
+//        Venue venue = new Venue();
+//        venue.setVenueId(2L);
+//        venue.setName("INOX VJ Happiness");
+//        venue.setAddress(" Hinjewadi P2, Pune");
+//        venue.setAreFacilitiesAvailable(true);
 
 
         //load all shows through retrofit
+        Event event = new Event();
+        event.setEventId(eventId);
+
         loadShows(event);
 
-        txtMovieName.setText(event.getEventName());
-        txtVenueNameAndAdr.setText(venue.getName() + venue.getAddress());
+        txtMovieName.setText(eventName);
+        txtVenueNameAndAdr.setText(venueName + ", " + venueAddress);
 
         confirm.setOnClickListener(v ->
         {
@@ -170,14 +179,10 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
         showList.clear();
 
-        API.getApi(this)
-                .getShowAPI()
-                .findShowByEvent(event.getEventId())
-                .enqueue(new Callback<JsonObject>()
+        API.getApi(this).getShowAPI().findShowByEvent(event.getEventId()).enqueue(new Callback<JsonObject>()
                 {
                     @Override
-                    public void onResponse(Call<JsonObject> call,
-                                           Response<JsonObject> response)
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
                     {
                         Log.d("BOOK", "HTTP Code = " + response.code());
                         Log.d("BOOK", "Successful = " + response.isSuccessful());
@@ -188,16 +193,12 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
                             {
                                 if (response.errorBody() != null)
                                 {
-                                    Log.e("BOOK",
-                                            "Error Body = "
-                                                    + response.errorBody().string());
+                                    Log.e("BOOK", "Error Body = " + response.errorBody().string());
                                 }
                             }
                             catch (Exception e)
                             {
-                                Log.e("BOOK",
-                                        "Unable to read error body",
-                                        e);
+                                Log.e("BOOK", "Unable to read error body", e);
                             }
 
                             return;
@@ -213,95 +214,91 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
                         try
                         {
-                            Log.d("BOOK",
-                                    "Response JSON = " + responseBody.toString());
+                            Log.d("BOOK", "Response JSON = " + responseBody.toString());
 
-                            JsonArray jsonArr =
-                                    responseBody.getAsJsonArray(
-                                            AppConstants.RESPONSE_DATA);
+                            JsonArray jsonArr = responseBody.getAsJsonArray(AppConstants.RESPONSE_DATA);
 
                             if (jsonArr == null)
                             {
-                                Log.e("BOOK",
-                                        "JSON array 'data' is NULL");
+                                Log.e("BOOK", "JSON array 'data' is NULL");
                                 return;
                             }
 
-                            Log.d("BOOK",
-                                    "Shows received = " + jsonArr.size());
+                            Log.d("BOOK", "Shows received = " + jsonArr.size());
 
                             showList.clear();
 
-                            for (JsonElement element : jsonArr)
+                            JsonArray venueArray = responseBody.getAsJsonArray(AppConstants.RESPONSE_DATA);
+
+                            showList.clear();
+
+                            for (JsonElement venueElement : venueArray)
                             {
-                                JsonObject obj = element.getAsJsonObject();
+                                JsonObject venueObj = venueElement.getAsJsonObject();
 
-                                Log.d("BOOK",
-                                        "Show JSON = " + obj.toString());
+                                long venueId = venueObj.get("venueId").getAsLong();
 
-                                Show show = new Show();
+                                JsonArray shows = venueObj.getAsJsonArray("shows");
 
-                                show.setShowId(
-                                        obj.get("showId").getAsLong());
+                                for (JsonElement showElement : shows)
+                                {
+                                    JsonObject obj = showElement.getAsJsonObject();
 
-                                show.setLanguage(
-                                        obj.get("language").getAsString());
+                                    Show show = new Show();
 
-                                show.setShowDate(
-                                        LocalDate.parse(
-                                                obj.get("showDate").getAsString()));
+                                    show.setVenueId(venueId);
 
-                                show.setShowStartTime(
-                                        LocalTime.parse(
-                                                obj.get("showStartTime").getAsString()));
+                                    show.setShowId(obj.get("showId").getAsLong());
 
-                                show.setShowEndTime(
-                                        LocalTime.parse(
-                                                obj.get("showEndTime").getAsString()));
+                                    show.setShowDate(LocalDate.parse(obj.get("showDate").getAsString()));
 
-                                show.setPrice(
-                                        obj.get("price").getAsDouble());
+                                    show.setShowStartTime(LocalTime.parse(obj.get("showStartTime").getAsString()));
 
-                                show.setEighteenPlus(
-                                        obj.get("eighteenPlus").getAsBoolean());
+                                    show.setShowEndTime(LocalTime.parse(obj.get("showEndTime").getAsString()));
 
-                                showList.add(show);
+                                    show.setPrice(obj.get("price").getAsDouble());
+
+                                    show.setLanguage(obj.get("language").getAsString());
+
+                                    show.setEighteenPlus(obj.get("eighteenPlus").getAsBoolean());
+
+                                    showList.add(show);
+                                }
                             }
 
-                            Log.d("BOOK",
-                                    "Parsed shows = " + showList.size());
-
                             loadDates();
+
+                            Log.d("BOOK", "Parsed shows = " + showList.size());
+
                         }
                         catch (Exception e)
                         {
-                            Log.e("BOOK",
-                                    "Exception while parsing",
-                                    e);
+                            Log.e("BOOK", "Exception while parsing", e);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<JsonObject> call,
-                                          Throwable t)
+                    public void onFailure(Call<JsonObject> call, Throwable t)
                     {
-                        Log.e("BOOK",
-                                "API FAILED",
-                                t);
+                        Log.e("BOOK", "API FAILED", t);
 
-                        Toast.makeText(BookSeatActivity.this,
-                                "Unable to connect to server",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BookSeatActivity.this, "Unable to connect to server", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void loadDates()
     {
+        LocalDate today = LocalDate.now();
         dates.clear();
 
         for(Show show : showList)
         {
+            if (!show.getVenueId().equals(venueId))
+                continue;
+
+            if (show.getShowDate().isBefore(today))
+                continue;
             String date = show.getShowDate().toString();
             boolean exists = false;
             for(DateItem item : dates)
@@ -334,7 +331,7 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
         for(Show show : showList)
         {
-            if(show.getShowDate().toString().equals(selectedDate))
+            if(show.getShowDate().toString().equals(selectedDate) && show.getVenueId().equals(venueId))
             {
                 filtered.add(
                         new TimeItem(

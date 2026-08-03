@@ -1,6 +1,10 @@
 package com.example.tikito.services;
+import com.example.tikito.entities.ApiResponse;
 import com.example.tikito.entities.Show;
+import com.example.tikito.entities.VenueShows;
 import com.google.gson.JsonObject;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -52,5 +56,13 @@ public interface ShowAPI
     Call<JsonObject> deleteShow(
             @Header("token") String token,
             @Path("showId") long showId);
+
+    // GET /tikito/shows/event/{eventId}
+    @GET("tikito/shows/event/{eventId}")
+    Call<ApiResponse<List<VenueShows>>> getShowsByEvent(
+            @Path("eventId") Long eventId
+    );
 }
+
+
 
