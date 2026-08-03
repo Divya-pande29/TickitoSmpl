@@ -2,7 +2,7 @@ package com.example.tikito.constants;
 
 public class AppConstants {
 
-    public static final String BASE_URL = "http://172.18.4.8:8080/"; //YOUR_IP_ADDRESS
+    public static final String BASE_URL = "http://192.168.68.109:8080/"; //YOUR_IP_ADDRESS
 
     public static final String PREF_NAME = "TikitoPreferences";
 
@@ -26,4 +26,9 @@ public class AppConstants {
 
     public static final String RESPONSE_DATA="data";
 
+    public static final String PREFERENCE_FILE_NAME="foodorder";
+    public static final String PREFERENCE_KEY_TOKEN="token";
+    public static final String PREFERENCE_KEY_LOGIN_STATUS="login_status";
+
 }
+

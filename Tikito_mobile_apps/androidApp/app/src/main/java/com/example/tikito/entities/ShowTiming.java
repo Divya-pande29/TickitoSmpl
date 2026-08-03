@@ -3,11 +3,20 @@ package com.example.tikito.entities;
 public class ShowTiming {
 
     private Long showId;
+    private String showDate;
     private String showStartTime;
     private String showEndTime;
     private Double price;
     private boolean eighteenPlus;
     private String language;
+
+    public String getShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(String showDate) {
+        this.showDate = showDate;
+    }
 
     public Long getShowId() {
         return showId;

@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.tikito.R;
 import com.example.tikito.activities.EventActivity;
 import com.example.tikito.activities.ShowActivity;
+import com.example.tikito.constants.AppConstants;
 import com.example.tikito.entities.Event;
 import com.example.tikito.utils.API;
 
@@ -60,7 +61,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
         else
             holder.txtAge.setText("All Ages");
 
-        String imageUrl = API.URL + event.getPosterUrl().substring(1);
+        String imageUrl = AppConstants.BASE_URL + event.getPosterUrl().substring(1);
 
         Log.d("POSTER_URL", imageUrl);
 

@@ -41,7 +41,6 @@ public class ProfileFragment extends Fragment {
     private ShapeableImageView imgProfile;
     private TextView textUserName;
 
-    Button booking;
     private SessionManager sessionManager;
 
     public ProfileFragment() {
@@ -96,7 +95,6 @@ public class ProfileFragment extends Fragment {
 
     private void initViews(View view) {
 
-        booking = view.findViewById(R.id.booking);
         btnLogout = view.findViewById(R.id.btnLogout);
 
         textUserName = view.findViewById(R.id.textUserName);
@@ -150,13 +148,6 @@ public class ProfileFragment extends Fragment {
             requireActivity().finish();
 
         });
-
-        booking.setOnClickListener(v ->
-        {
-            Intent intent = new Intent(requireContext(), BookSeatActivity.class);
-            startActivity(intent);
-        });
-
     }
 
 }
