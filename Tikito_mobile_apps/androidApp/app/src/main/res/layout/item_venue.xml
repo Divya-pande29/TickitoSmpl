@@ -5,10 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
     android:layout_marginBottom="14dp"
+    app:cardBackgroundColor="#1C1C1E"
     app:cardCornerRadius="18dp"
-    app:cardBackgroundColor="#1E1E1E"
-    app:strokeColor="#2F2F2F"
+    app:cardElevation="3dp"
+    app:strokeColor="#2E2E2E"
     app:strokeWidth="1dp">
 
     <LinearLayout
@@ -17,48 +20,76 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Venue Row -->
-
+        <!-- Top Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:src="@drawable/door"
-                app:tint="#FFC107" />
+                app:tint="#780A0A"
+                 />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/txtVenueName"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="10dp"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:layout_marginStart="12dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/txtVenueName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PVR Phoenix"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/txtAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textColor="#B0B0B0"
+                    android:textSize="14sp"/>
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/imgFood"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:src="@drawable/food"
-                android:visibility="gone"
-                app:tint="#FFC107" />
-
+                app:tint="#2CFF07" />
         </LinearLayout>
 
-        <!-- Address -->
+        <!-- Extra Info Row -->
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/txtAddress"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="#BDBDBD"
-            android:textSize="13sp"/>>
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/info"
+                app:tint="#3992AF" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="Parking • AC"
+                android:textColor="#BDBDBD"
+                android:textSize="12sp"/>
+        </LinearLayout>
 
         <!-- Timings -->
 
@@ -66,7 +97,7 @@
             android:id="@+id/layoutTimings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="16dp"
             app:flexWrap="wrap"
             app:justifyContent="flex_start"/>
 

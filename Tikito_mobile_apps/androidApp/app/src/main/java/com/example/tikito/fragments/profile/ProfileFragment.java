@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.tikito.R;
-import com.example.tikito.activities.BookSeatActivity;
+//import com.example.tikito.activities.BookSeatActivity;
 import com.example.tikito.activities.HomeActivity;
 import com.example.tikito.activities.TicketHistoryActivity;
 import com.example.tikito.activities.UpcomingTicketsActivity;

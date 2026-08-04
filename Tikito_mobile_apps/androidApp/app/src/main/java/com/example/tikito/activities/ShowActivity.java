@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,12 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tikito.R;
 import com.example.tikito.adapters.ShowAdapter;
+import com.example.tikito.adapters.ShowDateAdapter;
 import com.example.tikito.constants.AppConstants;
 import com.example.tikito.entities.ApiResponse;
-import com.example.tikito.entities.Show;
+import com.example.tikito.entities.ShowDate;
+import com.example.tikito.entities.ShowResponse;
+import com.example.tikito.entities.ShowTiming;
 import com.example.tikito.entities.VenueShows;
+import com.example.tikito.services.ShowAPI;
 import com.example.tikito.utils.API;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +30,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ShowActivity extends AppCompatActivity {
+public class ShowActivity extends AppCompatActivity
+        implements ShowDateAdapter.OnDateClickListener {
 
     private ImageView imgPoster;
     private TextView txtEventName;
+
+    private RecyclerView recyclerDates;
     private RecyclerView recyclerVenues;
 
-    private ShowAdapter adapter;
-    private List<VenueShows> showList;
+    private ShowDateAdapter dateAdapter;
+    private ShowAdapter venueAdapter;
+
+    private final List<String> dateList = new ArrayList<>();
+    private final List<VenueShows> allVenues = new ArrayList<>();
+    private final List<VenueShows> filteredVenues = new ArrayList<>();
 
     private Long eventId;
     private String eventName;
@@ -48,77 +57,103 @@ public class ShowActivity extends AppCompatActivity {
 
         imgPoster = findViewById(R.id.imgPoster);
         txtEventName = findViewById(R.id.txtEventName);
+
+        recyclerDates = findViewById(R.id.recyclerDates);
         recyclerVenues = findViewById(R.id.recyclerVenues);
 
-        eventId = getIntent().getLongExtra("eventId",0);
-        Log.d("SHOW_DEBUG", "EventId = " + eventId);
-        Toast.makeText(this, "EventId = " + eventId, Toast.LENGTH_LONG).show();
+        recyclerDates.setLayoutManager(
+                new LinearLayoutManager(this,
+                        LinearLayoutManager.HORIZONTAL,
+                        false));
+
+        recyclerVenues.setLayoutManager(
+                new LinearLayoutManager(this));
+
+        dateAdapter = new ShowDateAdapter(
+                this,
+                dateList,
+                this);
+
+        venueAdapter = new ShowAdapter(
+                this,
+                filteredVenues);
+
+        recyclerDates.setAdapter(dateAdapter);
+        recyclerVenues.setAdapter(venueAdapter);
+
+        eventId = getIntent().getLongExtra("eventId", 0);
         eventName = getIntent().getStringExtra("eventName");
         imageUrl = getIntent().getStringExtra("ImageUrl");
-
-
-        showList = new ArrayList<>();
-        adapter = new ShowAdapter(this, showList, eventId, eventName, imageUrl);
-
-        recyclerVenues.setLayoutManager(new LinearLayoutManager(this));
-        recyclerVenues.setAdapter(adapter);
 
         txtEventName.setText(eventName);
 
         Glide.with(this)
                 .load(imageUrl)
+                .placeholder(R.drawable.sc)
+                .error(R.drawable.sc)
                 .into(imgPoster);
 
         loadShows();
     }
 
-    private void loadShows(){
+    private void loadShows() {
 
-        API.getApi(this)
-                .getShowAPI()
-                .getShowsByEvent(eventId)
-                .enqueue(new Callback<ApiResponse<List<VenueShows>>>() {
+        ShowAPI api = API.getApi(this).getShowAPI();
+
+        api.getShowsByEvent(eventId)
+                .enqueue(new Callback<ApiResponse<ShowResponse>>() {
 
                     @Override
                     public void onResponse(
-                            Call<ApiResponse<List<VenueShows>>> call,
-                            Response<ApiResponse<List<VenueShows>>> response) {
-                        Log.d("SHOW_DEBUG", "HTTP Code = " + response.code());
-                        if(response.isSuccessful() && response.body()!=null
-                                && response.body().getStatus().equals(AppConstants.SUCCESS_RESPONSE)){
+                            Call<ApiResponse<ShowResponse>> call,
+                            Response<ApiResponse<ShowResponse>> response) {
 
-                            List<VenueShows> data = response.body().getData();
+                        if (response.isSuccessful()
+                                && response.body() != null
+                                && AppConstants.SUCCESS_RESPONSE.equals(response.body().getStatus())) {
 
-                            for (VenueShows venue : data) {
+                            ShowResponse showResponse = response.body().getData();
 
-                                Log.d("SHOW_DEBUG", "====================");
-                                Log.d("SHOW_DEBUG", "Venue = " + venue.getVenueName());
-                                Log.d("SHOW_DEBUG", "Address = " + venue.getAddress());
-                                Log.d("SHOW_DEBUG", "Shows object = " + venue.getShows());
-
-                                if (venue.getShows() != null) {
-                                    Log.d("SHOW_DEBUG", "Shows size = " + venue.getShows().size());
-                                } else {
-                                    Log.d("SHOW_DEBUG", "Shows is NULL");
-                                }
+                            if (showResponse == null) {
+                                Toast.makeText(
+                                        ShowActivity.this,
+                                        "No data found",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                                return;
                             }
 
-                            showList.clear();
-                            showList.addAll(data);
+                            allVenues.clear();
+                            allVenues.addAll(showResponse.getVenues());
 
-                            adapter.notifyDataSetChanged();
+                            dateList.clear();
 
-                        }else{
-                            Toast.makeText(ShowActivity.this,
+                            for (ShowDate date : showResponse.getDates()) {
+                                dateList.add(date.getShowDate());
+                            }
+
+                            dateAdapter.notifyDataSetChanged();
+
+                            if (!dateList.isEmpty()) {
+                                filterShows(dateList.get(0));
+                            }
+
+                        } else {
+
+                            Toast.makeText(
+                                    ShowActivity.this,
                                     "No shows available",
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_SHORT
+                            ).show();
                         }
-
                     }
 
                     @Override
-                    public void onFailure(Call<ApiResponse<List<VenueShows>>> call,
-                                          Throwable t) {
+                    public void onFailure(
+                            Call<ApiResponse<ShowResponse>> call,
+                            Throwable t) {
+
+                        Log.e("ShowActivity", "API Failure", t);
 
                         Toast.makeText(
                                 ShowActivity.this,
@@ -127,5 +162,50 @@ public class ShowActivity extends AppCompatActivity {
                         ).show();
                     }
                 });
+    }
+
+    /**
+     * Filter venues according to selected date.
+     */
+    private void filterShows(String selectedDate) {
+
+        filteredVenues.clear();
+
+        for (VenueShows venue : allVenues) {
+
+            List<ShowTiming> timings = new ArrayList<>();
+
+            if (venue.getShows() == null)
+                continue;
+
+            for (ShowTiming show : venue.getShows()) {
+
+                if (selectedDate.equals(show.getShowDate())) {
+                    timings.add(show);
+                }
+            }
+
+            if (!timings.isEmpty()) {
+
+                VenueShows newVenue = new VenueShows();
+
+                newVenue.setVenueId(venue.getVenueId());
+                newVenue.setVenueName(venue.getVenueName());
+                newVenue.setAddress(venue.getAddress());
+                newVenue.setAreFacilitiesAvailable(
+                        venue.isAreFacilitiesAvailable());
+
+                newVenue.setShows(timings);
+
+                filteredVenues.add(newVenue);
+            }
+        }
+
+        venueAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDateSelected(String date) {
+        filterShows(date);
     }
 }
