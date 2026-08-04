@@ -1,6 +1,7 @@
 package com.example.tikito.services;
 import com.example.tikito.entities.ApiResponse;
 import com.example.tikito.entities.Show;
+import com.example.tikito.entities.ShowResponse;
 import com.example.tikito.entities.VenueShows;
 import com.google.gson.JsonObject;
 
@@ -16,8 +17,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
-public interface ShowAPI
-{
+public interface ShowAPI {
     // GET /tikito/shows
     @GET("tikito/shows")
     Call<JsonObject> findAllShows();
@@ -26,9 +26,6 @@ public interface ShowAPI
     @GET("tikito/shows/{showId}")
     Call<JsonObject> findShowById(@Path("showId") long showId);
 
-    // GET /tikito/shows/event/{eventId}
-    @GET("tikito/shows/event/{eventId}")
-    Call<JsonObject> findShowByEvent(@Path("eventId") long eventId);
 
     // GET /tikito/shows/date/{showDate}
     @GET("tikito/shows/date/{showDate}")
@@ -59,10 +56,9 @@ public interface ShowAPI
 
     // GET /tikito/shows/event/{eventId}
     @GET("tikito/shows/event/{eventId}")
-    Call<ApiResponse<List<VenueShows>>> getShowsByEvent(
+    Call<ApiResponse<ShowResponse>> getShowsByEvent(
             @Path("eventId") Long eventId
     );
+
 }
-
-
 

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.sunbeam.tikito.dto.ShowDto;
+import com.sunbeam.tikito.dto.ShowResponseDto;
 import com.sunbeam.tikito.dto.VenueShowsDto;
 import com.sunbeam.tikito.entity.ShowEntity;
 import com.sunbeam.tikito.serviceimpl.ShowServiceImpl;
@@ -94,11 +95,11 @@ public class ShowController {
 	public ResponseEntity<?> getShowsByEvent(
 	        @PathVariable Long eventId) {
 
-	    List<VenueShowsDto> result =
+	    ShowResponseDto response =
 	            showServiceImpl.getShowsByEvent(eventId);
 
 	    return ResponseEntity.ok(
-	            Resp.success(result)
+	            Resp.success(response)
 	    );
 	}
 }

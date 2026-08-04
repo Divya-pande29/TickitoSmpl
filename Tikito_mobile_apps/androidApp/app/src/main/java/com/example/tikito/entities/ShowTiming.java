@@ -10,12 +10,7 @@ public class ShowTiming {
     private boolean eighteenPlus;
     private String language;
 
-    public String getShowDate() {
-        return showDate;
-    }
-
-    public void setShowDate(String showDate) {
-        this.showDate = showDate;
+    public ShowTiming() {
     }
 
     public Long getShowId() {
@@ -24,6 +19,14 @@ public class ShowTiming {
 
     public void setShowId(Long showId) {
         this.showId = showId;
+    }
+
+    public String getShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(String showDate) {
+        this.showDate = showDate;
     }
 
     public String getShowStartTime() {
