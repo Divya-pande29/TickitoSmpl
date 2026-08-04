@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +12,8 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#000000">
+        android:background="#000000"
+        android:elevation="4dp">
 
         <ImageView
             android:layout_width="85dp"
@@ -20,37 +22,75 @@
             android:src="@drawable/sc"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Poster -->
-    <ImageView
-        android:id="@+id/imgPoster"
-        android:layout_width="220dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="12dp"
-        android:scaleType="centerCrop"/>
-
-    <!-- Event Name -->
-    <TextView
-        android:id="@+id/txtEventName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Avengers : Doomsday"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:textSize="26sp"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- Venue List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerVenues"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="12dp"
-        android:clipToPadding="false"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Poster -->
+            <ImageView
+                android:id="@+id/imgPoster"
+                android:layout_width="180dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:scaleType="centerCrop"/>
+
+            <!-- Movie Name -->
+            <TextView
+                android:id="@+id/txtEventName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="14dp"
+                android:text="Movie Name"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="28sp"/>
+
+            <!-- Runtime -->
+            <TextView
+                android:id="@+id/txtRuntime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:text="Runtime : 2h 30m"
+                android:textColor="#BDBDBD"
+                android:textSize="15sp"/>
+
+            <!-- Date Strip -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerDates"
+                android:layout_width="match_parent"
+                android:layout_height="92dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#303030"/>
+
+            <!-- Venue List -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerVenues"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:padding="12dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

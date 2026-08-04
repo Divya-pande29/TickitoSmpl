@@ -1,5 +1,6 @@
 package com.sunbeam.tikito.dto;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import lombok.Data;
@@ -7,7 +8,9 @@ import lombok.Data;
 @Data
 	public class ShowTimingDto {
 
-	    private Long showId;
+	  private Long showId;
+
+	    private LocalDate showDate;
 
 	    private LocalTime showStartTime;
 
@@ -19,4 +22,3 @@ import lombok.Data;
 
 	    private String language;
 	}
-

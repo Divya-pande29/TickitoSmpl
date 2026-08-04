@@ -17,29 +17,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tikito.R;
 //import com.example.tikito.activities.BookingActivity;
-import com.example.tikito.activities.BookSeatActivity;
 import com.example.tikito.entities.ShowTiming;
 import com.example.tikito.entities.VenueShows;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
     private final Context context;
     private final List<VenueShows> venueList;
-    private Long eventId;
-    private String eventName;
-    private String imgUrl;
 
-    public ShowAdapter(Context context, List<VenueShows> venueList, Long eventId, String eventName, String imgUrl)
-    {
+    public ShowAdapter(Context context, List<VenueShows> venueList) {
         this.context = context;
         this.venueList = venueList;
-        this.eventId = eventId;
-        this.eventName = eventName;
-        this.imgUrl = imgUrl;
     }
 
     @NonNull
@@ -52,60 +45,75 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        VenueShows venue = venueList.get(position);
+            VenueShows venue = venueList.get(position);
 
-        holder.txtVenueName.setText(venue.getVenueName());
-        holder.txtAddress.setText(venue.getAddress());
+            holder.txtVenueName.setText(venue.getVenueName());
+            holder.txtAddress.setText(venue.getAddress());
 
-        if (venue.isAreFacilitiesAvailable()) {
-            holder.imgFood.setVisibility(View.VISIBLE);
-        } else {
-            holder.imgFood.setVisibility(View.GONE);
+            holder.imgFood.setVisibility(
+                    venue.isAreFacilitiesAvailable()
+                            ? View.VISIBLE
+                            : View.GONE);
+
+            holder.layoutTimings.removeAllViews();
+
+            //Use filtered shows if available otherwise all shows
+            List<ShowTiming> timings =
+                    venue.getFilteredShows().isEmpty()
+                            ? venue.getShows()
+                            : venue.getFilteredShows();
+
+            for (ShowTiming show : timings) {
+
+                Button btn = new Button(context);
+
+                btn.setText(show.getShowStartTime());
+
+                btn.setTextSize(13);
+                btn.setTextColor(Color.parseColor("#1A1A1A"));
+                btn.setAllCaps(false);
+
+                GradientDrawable drawable = new GradientDrawable();
+                drawable.setColor(Color.parseColor("#F5C242"));
+                drawable.setCornerRadius(60);
+                drawable.setStroke(2, Color.parseColor("#D8A600"));
+
+                btn.setBackground(drawable);
+
+                LinearLayout.LayoutParams params =
+                        new LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                params.setMargins(10,10,10,10);
+
+                btn.setLayoutParams(params);
+
+                btn.setPadding(40,20,40,20);
+
+//                btn.setOnClickListener(v -> {
+//
+//                    Intent intent =
+//                            new Intent(context, BookingActivity.class);
+//
+//                   intent.putExtra("showId", show.getShowId());
+//                    intent.putExtra("venueId", venue.getVenueId());
+//                    intent.putExtra("price", show.getPrice());
+//                    intent.putExtra("language", show.getLanguage());
+//                   intent.putExtra("date", show.getShowDate());
+//                    intent.putExtra("startTime", show.getShowStartTime());
+//                    intent.putExtra("endTime", show.getShowEndTime());
+//                    intent.putExtra("isAdult", show.isEighteenPlus());
+//                    intent.putExtra("showDate",show.getShowDate());
+//                    context.startActivity(intent);
+//                });
+
+                holder.layoutTimings.addView(btn);
+            }
         }
-
-        holder.layoutTimings.removeAllViews();
-
-        // Create single Book Seats button
-        Button bookButton = new Button(context);
-
-        bookButton.setText("Book Seats");
-        bookButton.setTextColor(Color.BLACK);
-        bookButton.setTextSize(16);
-
-        GradientDrawable drawable = new GradientDrawable();
-        drawable.setColor(Color.parseColor("#FFC107"));
-        drawable.setCornerRadius(40);
-
-        bookButton.setBackground(drawable);
-
-        LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        params.setMargins(10, 10, 10, 10);
-        bookButton.setLayoutParams(params);
-
-        bookButton.setOnClickListener(v -> {
-
-            Intent intent = new Intent(context, BookSeatActivity.class);
-
-            intent.putExtra("eventId", eventId);
-            intent.putExtra("eventName", eventName);
-            intent.putExtra("posterUrl", imgUrl);
-
-            intent.putExtra("venueId", venue.getVenueId());
-            intent.putExtra("venueName", venue.getVenueName());
-            intent.putExtra("venueAddress", venue.getAddress());
-
-            context.startActivity(intent);
-        });
-
-        holder.layoutTimings.addView(bookButton);
-    }
 
     @Override
     public int getItemCount() {
