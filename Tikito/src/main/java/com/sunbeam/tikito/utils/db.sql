@@ -70,6 +70,7 @@ CREATE TABLE events(
     event_duration_min INT,
     age_restriction INT,
     poster_url VARCHAR(500),
+    poster_public_id VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                ON UPDATE CURRENT_TIMESTAMP
@@ -80,7 +81,7 @@ CREATE TABLE shows(
     show_id INT PRIMARY KEY AUTO_INCREMENT,
     venue_id INT,
     event_id INT,
-    price DECIMAL(4,2),
+    price DECIMAL(10,2),
     is_eighteen_plus boolean NOT NULL,
     show_date DATE,
     show_start_time TIME,

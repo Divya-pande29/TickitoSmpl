@@ -125,12 +125,12 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
         });
 
-        btn = findViewById(R.id.tofood);
-        btn.setOnClickListener(v ->
-        {
-            Intent intent2 = new Intent(this, FoodActivity.class);
-            startActivity(intent2);
-        });
+//        btn = findViewById(R.id.tofood);
+//        btn.setOnClickListener(v ->
+//        {
+//            Intent intent2 = new Intent(this, FoodActivity.class);
+//            startActivity(intent2);
+//        });
     }
 
     @Override

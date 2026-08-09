@@ -223,13 +223,6 @@
                     android:id="@+id/confirmBtn"/>
             </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tofood"
-                android:text="food"/>
-
-
         </LinearLayout>
     </ScrollView>
 
