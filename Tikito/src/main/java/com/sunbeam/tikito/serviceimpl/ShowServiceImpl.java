@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import com.sunbeam.tikito.daos.EventDao;
 import com.sunbeam.tikito.daos.ShowDao;
 import com.sunbeam.tikito.daos.VenueDao;
+import com.sunbeam.tikito.dto.DateDto;
 import com.sunbeam.tikito.dto.ShowDto;
+import com.sunbeam.tikito.dto.ShowResponseDto;
 import com.sunbeam.tikito.dto.ShowTimingDto;
 import com.sunbeam.tikito.dto.VenueShowsDto;
 import com.sunbeam.tikito.entity.EventEntity;
@@ -130,31 +132,33 @@ public class ShowServiceImpl implements ShowService {
 	}
 	
 	@Override
-	public List<VenueShowsDto> getShowsByEvent(Long eventId) {
+	public ShowResponseDto getShowsByEvent(Long eventId) {
 
 	    List<ShowEntity> shows = showDao.findByEvent_EventId(eventId);
 
 	    Map<Long, VenueShowsDto> venueMap = new LinkedHashMap<>();
 
+	    Map<LocalDate, DateDto> dateMap = new LinkedHashMap<>();
+
 	    for (ShowEntity show : shows) {
 
 	        VenueEntity venue = show.getVenue();
 
-	        VenueShowsDto dto = venueMap.get(venue.getVenueId());
+	        VenueShowsDto venueDto = venueMap.get(venue.getVenueId());
 
-	        if (dto == null) {
+	        if (venueDto == null) {
 
-	            dto = new VenueShowsDto();
+	            venueDto = new VenueShowsDto();
 
-	            dto.setVenueId(venue.getVenueId());
-	            dto.setVenueName(venue.getName());
-	            dto.setAddress(venue.getAddress());
-	            dto.setAreFacilitiesAvailable(
+	            venueDto.setVenueId(venue.getVenueId());
+	            venueDto.setVenueName(venue.getName());
+	            venueDto.setAddress(venue.getAddress());
+	            venueDto.setAreFacilitiesAvailable(
 	                    venue.isAreFacilitiesAvailable());
 
-	            dto.setShows(new ArrayList<>());
+	            venueDto.setShows(new ArrayList<>());
 
-	            venueMap.put(venue.getVenueId(), dto);
+	            venueMap.put(venue.getVenueId(), venueDto);
 	        }
 
 	        ShowTimingDto timing = new ShowTimingDto();
@@ -167,9 +171,40 @@ public class ShowServiceImpl implements ShowService {
 	        timing.setLanguage(show.getLanguage());
 	        timing.setEighteenPlus(show.isEighteenPlus());
 
-	        dto.getShows().add(timing);
+	        venueDto.getShows().add(timing);
+
+	        if (!dateMap.containsKey(show.getShowDate())) {
+
+	            DateDto date = new DateDto();
+
+	            date.setShowDate(show.getShowDate());
+
+	            date.setDay(
+	                    show.getShowDate()
+	                            .getDayOfWeek()
+	                            .name()
+	                            .substring(0,3)
+	            );
+
+	            date.setMonth(
+	                    show.getShowDate()
+	                            .getDayOfMonth()
+	                            + " "
+	                            +
+	                            show.getShowDate()
+	                                    .getMonth()
+	                                    .name()
+	                                    .substring(0,3)
+	            );
+
+	            dateMap.put(show.getShowDate(), date);
+	        }
 	    }
 
-	    return new ArrayList<>(venueMap.values());
-	}
-}
+	    ShowResponseDto response = new ShowResponseDto();
+
+	    response.setDates(new ArrayList<>(dateMap.values()));
+	    response.setVenues(new ArrayList<>(venueMap.values()));
+
+	    return response;
+	}}

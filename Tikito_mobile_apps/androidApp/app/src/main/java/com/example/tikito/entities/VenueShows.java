@@ -1,5 +1,6 @@
 package com.example.tikito.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VenueShows {
@@ -8,7 +9,15 @@ public class VenueShows {
     private String venueName;
     private String address;
     private boolean areFacilitiesAvailable;
-    private List<ShowTiming> shows;
+
+    // All shows of this venue
+    private List<ShowTiming> shows = new ArrayList<>();
+
+    // Filtered shows according to selected date
+    private List<ShowTiming> filteredShows = new ArrayList<>();
+
+    public VenueShows() {
+    }
 
     public Long getVenueId() {
         return venueId;
@@ -48,5 +57,13 @@ public class VenueShows {
 
     public void setShows(List<ShowTiming> shows) {
         this.shows = shows;
+    }
+
+    public List<ShowTiming> getFilteredShows() {
+        return filteredShows;
+    }
+
+    public void setFilteredShows(List<ShowTiming> filteredShows) {
+        this.filteredShows = filteredShows;
     }
 }

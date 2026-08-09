@@ -1,19 +1,26 @@
 package com.sunbeam.tikito.utils;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
-	@ExceptionHandler(Exception.class)
-	public Resp<?> handleError(Exception e) {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Resp<?>> handleRuntime(RuntimeException e) {
 
-		String msg = e.getClass().getName() + " : " + e.getMessage();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Resp.error(e.getMessage()));
+    }
 
-		return Resp.error(msg);
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Resp<?>> handleException(Exception e) {
 
-	}
-
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Resp.error("Something went wrong."));
+    }
 }
-

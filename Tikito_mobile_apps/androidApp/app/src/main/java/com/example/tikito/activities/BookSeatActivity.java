@@ -5,61 +5,40 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.tikito.R;
-import com.example.tikito.adapters.DateAdapter;
 import com.example.tikito.adapters.SeatAdapter;
-import com.example.tikito.adapters.TimeAdapter;
 import com.example.tikito.constants.AppConstants;
-import com.example.tikito.entities.DateItem;
 import com.example.tikito.entities.Event;
 import com.example.tikito.entities.SeatItem;
-import com.example.tikito.entities.Show;
-import com.example.tikito.entities.TimeItem;
-import com.example.tikito.entities.Venue;
 import com.example.tikito.utils.API;
 import com.example.tikito.utils.SessionManager;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.example.tikito.entities.Ticket;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.OnSeatSelectedListener,
-        TimeAdapter.OnTimeClickListener,
-        DateAdapter.OnDateClickListener
-{
-    RecyclerView recyclerViewDates, recyclerViewTimes, recyclerViewSeats;
-    DateAdapter dateAdapter;
-    TimeAdapter timeAdapter;
+public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.OnSeatSelectedListener {
+
+    RecyclerView recyclerViewSeats;
     SeatAdapter seatAdapter;
-    TextView txtNoOfSeats, txtSeatNos, txtMovieName, txtVenueNameAndAdr;
+    TextView txtNoOfSeats, txtSeatNos, txtMovieName, txtDate;
     Button confirm;
     private long venueId;
     private long selectedShowId;
     SessionManager manager;
-    List<TimeItem> times = new ArrayList<>();
-    List<DateItem> dates = new ArrayList<>();
-    List<Show> showList = new ArrayList<>();
     List<SeatItem> seats = new ArrayList<>();
+    private double ticketPrice;
+    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,70 +53,83 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
         txtSeatNos = findViewById(R.id.txtSeatNos);
         txtNoOfSeats = findViewById(R.id.txtNoOfSeats);
         txtMovieName = findViewById(R.id.txtMovieName);
-        txtVenueNameAndAdr = findViewById(R.id.txtVenueNameAndAdr);
-        recyclerViewDates = findViewById(R.id.recyclerViewDates);
-        recyclerViewTimes = findViewById(R.id.recyclerViewTimes);
+        txtDate = findViewById(R.id.txtDate);
         recyclerViewSeats = findViewById(R.id.recyclerViewSeats);
         confirm = findViewById(R.id.confirmBtn);
 
-        //set layout for adaptors
-        LinearLayoutManager layoutManagerDate = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        LinearLayoutManager layoutManagerTime = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-
-        //set Adapters
-        dateAdapter = new DateAdapter(this, dates, this);
-        recyclerViewDates.setAdapter(dateAdapter);
-        recyclerViewDates.setLayoutManager(layoutManagerDate);
-
-        timeAdapter = new TimeAdapter(this, times, this);
-        recyclerViewTimes.setAdapter(timeAdapter);
-        recyclerViewTimes.setLayoutManager(layoutManagerTime);
-
+        //Adaptors for Seat
         seatAdapter = new SeatAdapter(this, seats, this);
         recyclerViewSeats.setAdapter(seatAdapter);
         recyclerViewSeats.setLayoutManager(new GridLayoutManager(this, 5));
 
+        //Intent to get Data from ShowActivity
         Intent intent = getIntent();
 
-        long eventId = intent.getLongExtra("eventId",0);
-
+        //data from Intent
         String eventName = intent.getStringExtra("eventName");
         String posterUrl = intent.getStringExtra("posterUrl");
-
         venueId = intent.getLongExtra("venueId",0);
-
         String venueName = intent.getStringExtra("venueName");
-        String venueAddress = intent.getStringExtra("venueAddress");
-
-//        Event event = new Event();
-//        event.setEventId(1L);
-//        event.setEventName("Avengers Endgame IMAX");
-//        event.setEventType("Movie");
-//        event.setEventDescription("SuperHero Action Movie");
-//        event.setEventDurationMin(189L);
-//        event.setAgeRestriction(13);
-//        event.setPosterUrl("postername.url");
-//
-//        Venue venue = new Venue();
-//        venue.setVenueId(2L);
-//        venue.setName("INOX VJ Happiness");
-//        venue.setAddress(" Hinjewadi P2, Pune");
-//        venue.setAreFacilitiesAvailable(true);
+        String showDate = intent.getStringExtra("showDate");
+        selectedShowId = intent.getLongExtra("showId", 0);
+        String showStartTime = intent.getStringExtra("showTime");
+        ticketPrice = getIntent().getDoubleExtra("price", 0);
 
 
-        //load all shows through retrofit
-        Event event = new Event();
-        event.setEventId(eventId);
+        Log.d("BOOK", "Ticket Price = " + ticketPrice);
 
-        loadShows(event);
+        //call to load Seat Layout
+        loadSeatLayout(selectedShowId);
 
-        txtMovieName.setText(eventName);
-        txtVenueNameAndAdr.setText(venueName + ", " + venueAddress);
+        //set Data in txt Views
+        txtDate.setText(showDate);
 
-        confirm.setOnClickListener(v ->
+
+//        confirm.setOnClickListener(v ->
+//        {
+//            bookSeats();
+//            Toast.makeText(this, "Booking Confirmed", Toast.LENGTH_SHORT).show();
+//        });
+
+        confirm.setOnClickListener(v -> {
+
+            List<Long> seatIds = new ArrayList<>();
+            ArrayList<String> seatNumbers = new ArrayList<>();
+
+            for (SeatItem seat : seats) {
+                if (seat.isSelected()) {
+                    seatIds.add(seat.getSeatId());
+                    seatNumbers.add(seat.getSeatNo());
+                }
+            }
+
+            if (seatIds.isEmpty()) {
+                Toast.makeText(this,
+                        "Please select at least one seat",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent intent1 = new Intent(this, FoodActivity.class);
+
+            intent1.putExtra("showId", selectedShowId);
+            intent1.putExtra("seatIds", new ArrayList<>(seatIds));
+            intent1.putExtra("seatNumbers", seatNumbers);
+            intent1.putExtra("price", ticketPrice);
+            intent1.putExtra("eventName", eventName);
+            intent1.putExtra("venueName", venueName);
+            intent1.putExtra("showDate", showDate);
+            intent1.putExtra("showTime", showStartTime);
+
+            startActivity(intent1);
+
+        });
+
+        btn = findViewById(R.id.tofood);
+        btn.setOnClickListener(v ->
         {
-            bookSeats();
-            Toast.makeText(this, "Booking Confirmed", Toast.LENGTH_SHORT).show();
+            Intent intent2 = new Intent(this, FoodActivity.class);
+            startActivity(intent2);
         });
     }
 
@@ -147,213 +139,18 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
         txtNoOfSeats.setText(selectedSeats.size() + " seats selected");
 
         StringBuilder seatNums = new StringBuilder();
-
         for(SeatItem si : selectedSeats)
         {
             seatNums.append(si.getSeatNo()).append(", ");
         }
-
         if(seatNums.length() > 0)
         {
             seatNums.setLength(seatNums.length() - 2); // remove ","
         }
-
         txtSeatNos.setText(seatNums.toString());
     }
 
-    @Override
-    public void onTimeClicked(TimeItem item)
-    {
-        loadBookedSeats(item.getShowId());
-    }
-
-    @Override
-    public void onDateClicked(DateItem dateItem)
-    {
-        loadTimes(dateItem.getDate());
-    }
-    private void loadShows(Event event)
-    {
-        Log.d("BOOK", "========== LOAD SHOWS ==========");
-        Log.d("BOOK", "Calling API for eventId = " + event.getEventId());
-
-        showList.clear();
-
-        API.getApi(this).getShowAPI().findShowByEvent(event.getEventId()).enqueue(new Callback<JsonObject>()
-                {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
-                    {
-                        Log.d("BOOK", "HTTP Code = " + response.code());
-                        Log.d("BOOK", "Successful = " + response.isSuccessful());
-
-                        if (!response.isSuccessful())
-                        {
-                            try
-                            {
-                                if (response.errorBody() != null)
-                                {
-                                    Log.e("BOOK", "Error Body = " + response.errorBody().string());
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Log.e("BOOK", "Unable to read error body", e);
-                            }
-
-                            return;
-                        }
-
-                        JsonObject responseBody = response.body();
-
-                        if (responseBody == null)
-                        {
-                            Log.e("BOOK", "Response body is NULL");
-                            return;
-                        }
-
-                        try
-                        {
-                            Log.d("BOOK", "Response JSON = " + responseBody.toString());
-
-                            JsonArray jsonArr = responseBody.getAsJsonArray(AppConstants.RESPONSE_DATA);
-
-                            if (jsonArr == null)
-                            {
-                                Log.e("BOOK", "JSON array 'data' is NULL");
-                                return;
-                            }
-
-                            Log.d("BOOK", "Shows received = " + jsonArr.size());
-
-                            showList.clear();
-
-                            JsonArray venueArray = responseBody.getAsJsonArray(AppConstants.RESPONSE_DATA);
-
-                            showList.clear();
-
-                            for (JsonElement venueElement : venueArray)
-                            {
-                                JsonObject venueObj = venueElement.getAsJsonObject();
-
-                                long venueId = venueObj.get("venueId").getAsLong();
-
-                                JsonArray shows = venueObj.getAsJsonArray("shows");
-
-                                for (JsonElement showElement : shows)
-                                {
-                                    JsonObject obj = showElement.getAsJsonObject();
-
-                                    Show show = new Show();
-
-                                    show.setVenueId(venueId);
-
-                                    show.setShowId(obj.get("showId").getAsLong());
-
-                                    show.setShowDate(LocalDate.parse(obj.get("showDate").getAsString()));
-
-                                    show.setShowStartTime(LocalTime.parse(obj.get("showStartTime").getAsString()));
-
-                                    show.setShowEndTime(LocalTime.parse(obj.get("showEndTime").getAsString()));
-
-                                    show.setPrice(obj.get("price").getAsDouble());
-
-                                    show.setLanguage(obj.get("language").getAsString());
-
-                                    show.setEighteenPlus(obj.get("eighteenPlus").getAsBoolean());
-
-                                    showList.add(show);
-                                }
-                            }
-
-                            loadDates();
-
-                            Log.d("BOOK", "Parsed shows = " + showList.size());
-
-                        }
-                        catch (Exception e)
-                        {
-                            Log.e("BOOK", "Exception while parsing", e);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t)
-                    {
-                        Log.e("BOOK", "API FAILED", t);
-
-                        Toast.makeText(BookSeatActivity.this, "Unable to connect to server", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void loadDates()
-    {
-        LocalDate today = LocalDate.now();
-        dates.clear();
-
-        for(Show show : showList)
-        {
-            if (!show.getVenueId().equals(venueId))
-                continue;
-
-            if (show.getShowDate().isBefore(today))
-                continue;
-            String date = show.getShowDate().toString();
-            boolean exists = false;
-            for(DateItem item : dates)
-            {
-                if(item.getDate().equals(date))
-                {
-                    exists = true;
-                    break;
-                }
-            }
-
-            if(!exists)
-            {
-                dates.add(new DateItem("", date));
-            }
-        }
-
-        dateAdapter.setDateItems(dates);
-        if (!dates.isEmpty())
-        {
-            dateAdapter.setSelectedPosition(0);
-            loadTimes(dates.get(0).getDate());
-        }
-        Log.d("DATES", "Dates = " + dates.size());
-    }
-
-    private void loadTimes(String selectedDate)
-    {
-        List<TimeItem> filtered = new ArrayList<>();
-
-        for(Show show : showList)
-        {
-            if(show.getShowDate().toString().equals(selectedDate) && show.getVenueId().equals(venueId))
-            {
-                filtered.add(
-                        new TimeItem(
-                                show.getShowId(),
-                                show.getShowStartTime().toString()
-                        )
-                );
-            }
-        }
-
-        Log.d("TIME", "Times = " + filtered.size());
-
-        timeAdapter.setTimeItems(filtered);
-
-        if (!filtered.isEmpty())
-        {
-            timeAdapter.setSelectedPosition(0);
-            loadBookedSeats(filtered.get(0).getShowId());
-        }
-    }
-
-    private void loadBookedSeats(Long showId)
+    private void loadSeatLayout(Long showId)
     {
         selectedShowId = showId;
 
@@ -531,11 +328,6 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
                         startActivity(intent);
                         finish();
 
-//                        Toast.makeText(BookSeatActivity.this,
-//                                "Booking Successful",
-//                                Toast.LENGTH_SHORT).show();
-//
-//                        loadBookedSeats(selectedShowId);
                     }
 
                     @Override

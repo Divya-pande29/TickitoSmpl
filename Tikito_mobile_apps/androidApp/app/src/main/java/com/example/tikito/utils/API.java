@@ -9,6 +9,8 @@ import android.content.Context;
 import com.example.tikito.constants.AppConstants;
 import com.example.tikito.services.BookingAPI;
 import com.example.tikito.services.EventAPI;
+import com.example.tikito.services.FoodAPI;
+import com.example.tikito.services.PaymentAPI;
 import com.example.tikito.services.ShowAPI;
 import com.example.tikito.services.UserAPI;
 import com.example.tikito.services.VenueAPI;
@@ -20,12 +22,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class API {
 
     private static API api;
-    public static final String URL = "http://172.18.4.85:8080/";
+    public static final String URL = "http://172.18.4.72/";
     private final EventAPI eventAPI;
     private final VenueAPI venueAPI;
     private final ShowAPI showAPI;
     private final BookingAPI bookingAPI;
     private final UserAPI userAPI;
+    private final FoodAPI foodAPI;
+    private final PaymentAPI paymentAPI;
 
     private API(Context context) {
 
@@ -44,6 +48,8 @@ public class API {
         showAPI = retrofit.create(ShowAPI.class);
         eventAPI = retrofit.create(EventAPI.class);
         userAPI = retrofit.create(UserAPI.class);
+        foodAPI = retrofit.create(FoodAPI.class);
+        paymentAPI = retrofit.create(PaymentAPI.class);
     }
 
     public static synchronized API getApi(Context context) {
@@ -71,5 +77,13 @@ public class API {
 
     public BookingAPI getBookingAPI() {
         return bookingAPI;
+    }
+
+    public FoodAPI getFoodAPI() {
+        return foodAPI;
+    }
+
+    public PaymentAPI getPaymentAPI() {
+        return paymentAPI;
     }
 }
