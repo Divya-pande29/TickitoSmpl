@@ -46,3 +46,6 @@ local.properties
 
 *.jks
 *.keystore
+
+# env files
+.env

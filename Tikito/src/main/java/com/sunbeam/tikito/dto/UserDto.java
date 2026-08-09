@@ -17,6 +17,7 @@ public class UserDto {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private Integer otp; //added for otp verification
 	private String password;
 	private String phone;
 	private String role;

@@ -12,6 +12,7 @@ public class UserDto {
     private String oldPassword;
     private String newPassword;
     private String imageName;
+    private Integer otp;
 
     public UserDto(String firstName,
                    String lastName,
@@ -27,6 +28,30 @@ public class UserDto {
 
     public UserDto() {
 
+    }
+
+    public UserDto(Integer userId,
+                   String firstName,
+                   String lastName,
+                   String email,
+                   String password,
+                   String phone,
+                   String role,
+                   String oldPassword,
+                   String newPassword,
+                   String imageName,
+                   Integer otp) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.role = role;
+        this.oldPassword = oldPassword;
+        this.newPassword = newPassword;
+        this.imageName = imageName;
+        this.otp = otp;
     }
 
     public Integer getUserId() {
@@ -107,5 +132,13 @@ public class UserDto {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public Integer getOtp() {
+        return otp;
+    }
+
+    public void setOtp(Integer otp) {
+        this.otp = otp;
     }
 }

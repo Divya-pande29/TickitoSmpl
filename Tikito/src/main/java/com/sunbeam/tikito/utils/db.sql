@@ -129,4 +129,26 @@ CREATE TABLE booked_seats (
     CONSTRAINT uk_show_seat UNIQUE (show_id, seat_id)
 );
 
+CREATE TABLE otp_verification (
+    otp_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    otp INT NOT NULL,
+    purpose VARCHAR(50) NOT NULL,
+    expiry_time DATETIME NOT NULL,
+    used BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE foods (
+    food_id INT PRIMARY KEY AUTO_INCREMENT,
+    food_name VARCHAR(100) NOT NULL,
+    description VARCHAR(300),
+    image_url VARCHAR(500),
+    price DECIMAL(10,2) NOT NULL,
+    is_available BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP
+);
 

@@ -13,4 +13,5 @@ public class AvailableSeatsDto
 {
     private Long seatId;
     private String seatNo;
+    private boolean booked;
 }

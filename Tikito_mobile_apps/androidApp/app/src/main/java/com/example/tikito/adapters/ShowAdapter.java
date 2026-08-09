@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tikito.R;
 //import com.example.tikito.activities.BookingActivity;
+import com.example.tikito.activities.BookSeatActivity;
 import com.example.tikito.entities.ShowTiming;
 import com.example.tikito.entities.VenueShows;
 import com.google.android.flexbox.FlexboxLayout;
@@ -30,9 +31,14 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
     private final Context context;
     private final List<VenueShows> venueList;
 
-    public ShowAdapter(Context context, List<VenueShows> venueList) {
+    //vaishnavi
+    private final String eventName;
+
+    //added eventname to constructor
+    public ShowAdapter(Context context, List<VenueShows> venueList, String eventName) {
         this.context = context;
         this.venueList = venueList;
+        this.eventName = eventName;
     }
 
     @NonNull
@@ -94,22 +100,28 @@ public class ShowAdapter extends RecyclerView.Adapter<ShowAdapter.ViewHolder> {
 
                 btn.setPadding(40,20,40,20);
 
-//                btn.setOnClickListener(v -> {
-//
-//                    Intent intent =
-//                            new Intent(context, BookingActivity.class);
-//
-//                   intent.putExtra("showId", show.getShowId());
-//                    intent.putExtra("venueId", venue.getVenueId());
-//                    intent.putExtra("price", show.getPrice());
-//                    intent.putExtra("language", show.getLanguage());
-//                   intent.putExtra("date", show.getShowDate());
-//                    intent.putExtra("startTime", show.getShowStartTime());
-//                    intent.putExtra("endTime", show.getShowEndTime());
-//                    intent.putExtra("isAdult", show.isEighteenPlus());
-//                    intent.putExtra("showDate",show.getShowDate());
-//                    context.startActivity(intent);
-//                });
+                btn.setOnClickListener(v -> {
+
+                    Intent intent =
+                            new Intent(context, BookSeatActivity.class);
+
+                   intent.putExtra("showId", show.getShowId());
+                    intent.putExtra("venueId", venue.getVenueId());
+                    intent.putExtra("price", show.getPrice());
+                    intent.putExtra("language", show.getLanguage());
+                   intent.putExtra("date", show.getShowDate());
+                    intent.putExtra("startTime", show.getShowStartTime());
+                    intent.putExtra("endTime", show.getShowEndTime());
+                    intent.putExtra("isAdult", show.isEighteenPlus());
+                    intent.putExtra("showDate",show.getShowDate());
+
+                    //by vaishnavi
+                    intent.putExtra("price", show.getPrice());
+                    intent.putExtra("eventName", eventName);
+                    intent.putExtra("venueName", venue.getVenueName());
+                    intent.putExtra("showTime", show.getShowStartTime());
+                    context.startActivity(intent);
+                });
 
                 holder.layoutTimings.addView(btn);
             }
