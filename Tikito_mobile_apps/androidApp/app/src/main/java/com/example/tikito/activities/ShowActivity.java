@@ -89,8 +89,6 @@ public class ShowActivity extends AppCompatActivity
 
         Glide.with(this)
                 .load(imageUrl)
-                .placeholder(R.drawable.sc)
-                .error(R.drawable.sc)
                 .into(imgPoster);
 
         loadShows();

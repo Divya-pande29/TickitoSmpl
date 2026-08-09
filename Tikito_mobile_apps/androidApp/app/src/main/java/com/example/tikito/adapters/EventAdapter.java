@@ -61,13 +61,21 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
         else
             holder.txtAge.setText("All Ages");
 
-        String imageUrl = AppConstants.BASE_URL + event.getPosterUrl().substring(1);
+//        String imageUrl = AppConstants.BASE_URL + event.getPosterUrl().substring(1);
+//
+//        Log.d("POSTER_URL", imageUrl);
+//
+//        Glide.with(context)
+//                .load(imageUrl)
+//                .into(holder.imgPoster);
+        String imageUrl = event.getPosterUrl();
 
         Log.d("POSTER_URL", imageUrl);
 
         Glide.with(context)
                 .load(imageUrl)
                 .into(holder.imgPoster);
+
         holder.btnBook.setOnClickListener(v -> {
             Intent intent = new Intent(context, ShowActivity.class);
             intent.putExtra("eventId", event.getEventId());

@@ -1,6 +1,7 @@
 package com.example.tikito.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,8 +15,11 @@ import com.example.tikito.entities.ApiResponse;
 import com.example.tikito.entities.Event;
 import com.example.tikito.utils.API;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +33,21 @@ public class EventActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://www.google.com");
+
+                HttpsURLConnection conn =
+                        (HttpsURLConnection) url.openConnection();
+
+                conn.connect();
+
+                Log.d("HTTPS_TEST", "Google = " + conn.getResponseCode());
+
+            } catch (Exception e) {
+                Log.e("HTTPS_TEST", "Google FAILED", e);
+            }
+        }).start();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
