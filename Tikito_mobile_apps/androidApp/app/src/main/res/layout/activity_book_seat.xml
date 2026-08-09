@@ -18,6 +18,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:src="@mipmap/ic_launcher" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -30,20 +37,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:text="Movie Name"
+                    android:text="Welcome to Tikito"
                     android:textColor="#FFC107"
                     android:textSize="25dp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:textColor="#FFC107"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Venue Name,Venue Address"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:id="@+id/txtVenueNameAndAdr"/>
-
 
                <LinearLayout
                    android:layout_width="match_parent"
@@ -58,20 +55,20 @@
                        android:layout_gravity="center"
                        android:textSize="20dp"
                        android:textColor="#FFC107"
-                       android:text="Aug 21,"
+                       android:text="Aug 21"
                        android:textStyle="bold"
                        android:layout_margin="5dp"/>
 
-                   <TextView
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:id="@+id/txtTime"
-                       android:layout_gravity="center"
-                       android:textSize="20dp"
-                       android:textColor="#FFC107"
-                       android:text="09:00"
-                       android:textStyle="bold"
-                       android:layout_margin="5dp"/>
+<!--                   <TextView-->
+<!--                       android:layout_width="wrap_content"-->
+<!--                       android:layout_height="wrap_content"-->
+<!--                       android:id="@+id/txtTime"-->
+<!--                       android:layout_gravity="center"-->
+<!--                       android:textSize="20dp"-->
+<!--                       android:textColor="#FFC107"-->
+<!--                       android:text="09:00"-->
+<!--                       android:textStyle="bold"-->
+<!--                       android:layout_margin="5dp"/>-->
                </LinearLayout>
 
             </LinearLayout>
@@ -226,7 +223,11 @@
                     android:id="@+id/confirmBtn"/>
             </LinearLayout>
 
-
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tofood"
+                android:text="food"/>
 
 
         </LinearLayout>

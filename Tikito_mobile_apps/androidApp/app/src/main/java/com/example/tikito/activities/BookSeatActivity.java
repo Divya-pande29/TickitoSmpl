@@ -31,12 +31,14 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
     RecyclerView recyclerViewSeats;
     SeatAdapter seatAdapter;
-    TextView txtNoOfSeats, txtSeatNos, txtMovieName, txtVenueNameAndAdr, txtDate, txtTime;
+    TextView txtNoOfSeats, txtSeatNos, txtMovieName, txtDate;
     Button confirm;
     private long venueId;
     private long selectedShowId;
     SessionManager manager;
     List<SeatItem> seats = new ArrayList<>();
+    private double ticketPrice;
+    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,8 +54,6 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
         txtNoOfSeats = findViewById(R.id.txtNoOfSeats);
         txtMovieName = findViewById(R.id.txtMovieName);
         txtDate = findViewById(R.id.txtDate);
-        txtTime = findViewById(R.id.txtTime);
-        txtVenueNameAndAdr = findViewById(R.id.txtVenueNameAndAdr);
         recyclerViewSeats = findViewById(R.id.recyclerViewSeats);
         confirm = findViewById(R.id.confirmBtn);
 
@@ -70,24 +70,66 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
         String posterUrl = intent.getStringExtra("posterUrl");
         venueId = intent.getLongExtra("venueId",0);
         String venueName = intent.getStringExtra("venueName");
-        String venueAddress = intent.getStringExtra("venueAddress");
         String showDate = intent.getStringExtra("showDate");
         selectedShowId = intent.getLongExtra("showId", 0);
-        String showStartTime = intent.getStringExtra("showStartTime");
+        String showStartTime = intent.getStringExtra("showTime");
+        ticketPrice = getIntent().getDoubleExtra("price", 0);
+
+
+        Log.d("BOOK", "Ticket Price = " + ticketPrice);
 
         //call to load Seat Layout
         loadSeatLayout(selectedShowId);
 
         //set Data in txt Views
-        txtMovieName.setText(eventName);
-        txtVenueNameAndAdr.setText(venueName + ", " + venueAddress);
         txtDate.setText(showDate);
-        txtTime.setText(showStartTime);
 
-        confirm.setOnClickListener(v ->
+
+//        confirm.setOnClickListener(v ->
+//        {
+//            bookSeats();
+//            Toast.makeText(this, "Booking Confirmed", Toast.LENGTH_SHORT).show();
+//        });
+
+        confirm.setOnClickListener(v -> {
+
+            List<Long> seatIds = new ArrayList<>();
+            ArrayList<String> seatNumbers = new ArrayList<>();
+
+            for (SeatItem seat : seats) {
+                if (seat.isSelected()) {
+                    seatIds.add(seat.getSeatId());
+                    seatNumbers.add(seat.getSeatNo());
+                }
+            }
+
+            if (seatIds.isEmpty()) {
+                Toast.makeText(this,
+                        "Please select at least one seat",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Intent intent1 = new Intent(this, FoodActivity.class);
+
+            intent1.putExtra("showId", selectedShowId);
+            intent1.putExtra("seatIds", new ArrayList<>(seatIds));
+            intent1.putExtra("seatNumbers", seatNumbers);
+            intent1.putExtra("price", ticketPrice);
+            intent1.putExtra("eventName", eventName);
+            intent1.putExtra("venueName", venueName);
+            intent1.putExtra("showDate", showDate);
+            intent1.putExtra("showTime", showStartTime);
+
+            startActivity(intent1);
+
+        });
+
+        btn = findViewById(R.id.tofood);
+        btn.setOnClickListener(v ->
         {
-            bookSeats();
-            Toast.makeText(this, "Booking Confirmed", Toast.LENGTH_SHORT).show();
+            Intent intent2 = new Intent(this, FoodActivity.class);
+            startActivity(intent2);
         });
     }
 

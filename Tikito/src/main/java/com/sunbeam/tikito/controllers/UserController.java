@@ -49,6 +49,18 @@ public class UserController {
         return Resp.success(
                 userService.getProfile(loggedInUser.getUserId()));
     }
+    
+    @PutMapping("/profile")
+    public Resp<?> updateProfile(
+            @RequestBody UserDto dto,
+            @AuthenticationPrincipal UserEntity loggedInUser){
+
+        return Resp.success(
+                userService.updateProfile(
+                        loggedInUser.getUserId(),
+                        dto));
+    }
+    
 
     // Logged-in user
     @PutMapping("/password")
@@ -63,12 +75,21 @@ public class UserController {
     }
 
     // Public
-    @PutMapping("/forgot-password")
+    @PostMapping("/forgot-password")
     public Resp<?> forgotPassword(
             @RequestBody UserDto dto) {
 
         return Resp.success(
                 userService.forgotPassword(dto));
+    }
+    
+    //public 
+    @PostMapping("/reset-password")
+    public Resp<?> resetPassword(
+            @RequestBody UserDto dto)
+    {
+        return Resp.success(
+                userService.resetPassword(dto));
     }
 
     // Logged-in user

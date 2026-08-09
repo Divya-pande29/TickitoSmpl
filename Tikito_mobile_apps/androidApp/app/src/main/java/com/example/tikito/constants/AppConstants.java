@@ -2,7 +2,7 @@ package com.example.tikito.constants;
 
 public class AppConstants {
 
-    public static final String BASE_URL = "http://172.18.4.31:8080/"; //YOUR_IP_ADDRESS
+    public static final String BASE_URL = "http://192.168.68.109:8080/"; //YOUR_IP_ADDRESS
 
     public static final String PREF_NAME = "TikitoPreferences";
 

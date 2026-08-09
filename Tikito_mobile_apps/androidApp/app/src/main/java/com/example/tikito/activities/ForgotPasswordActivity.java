@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.util.Patterns;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tikito.R;
@@ -22,9 +22,8 @@ import retrofit2.Response;
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private TextInputEditText editEmail;
-    private TextInputEditText editNewPassword;
 
-    private MaterialButton btnResetPassword;
+    private MaterialButton btnSendOtp;
     private TextView textLogin;
 
     @Override
@@ -39,18 +38,17 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private void initViews() {
 
         editEmail = findViewById(R.id.editEmail);
-        editNewPassword = findViewById(R.id.editNewPassword);
 
-        btnResetPassword = findViewById(R.id.btnResetPassword);
+        btnSendOtp = findViewById(R.id.btnSendOtp);
         textLogin = findViewById(R.id.textLogin);
     }
 
     private void initListeners() {
 
-        btnResetPassword.setOnClickListener(v -> {
+        btnSendOtp.setOnClickListener(v -> {
 
             if (validateInputs()) {
-                resetPassword();
+                sendOtp();
             }
 
         });
@@ -61,7 +59,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private boolean validateInputs() {
 
         String email = editEmail.getText().toString().trim();
-        String newPassword = editNewPassword.getText().toString().trim();
+
 
         if (TextUtils.isEmpty(email)) {
             editEmail.setError("Enter email");
@@ -75,29 +73,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             return false;
         }
 
-        if (TextUtils.isEmpty(newPassword)) {
-            editNewPassword.setError("Enter new password");
-            editNewPassword.requestFocus();
-            return false;
-        }
-
-        if (newPassword.length() < 4) {
-            editNewPassword.setError("Password must be at least 4 characters");
-            editNewPassword.requestFocus();
-            return false;
-        }
-
         return true;
     }
 
-    private void resetPassword() {
+    private void sendOtp() {
 
         UserDto dto = new UserDto();
 
         dto.setEmail(editEmail.getText().toString().trim());
-        dto.setNewPassword(editNewPassword.getText().toString().trim());
 
-        API.getApi(this )
+        API.getApi(this)
                 .getUserAPI()
                 .forgotPassword(dto)
                 .enqueue(new Callback<ApiResponse<String>>() {
@@ -116,13 +101,22 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT
                             ).show();
 
-                            finish();
+                            Intent intent = new Intent(
+                                    ForgotPasswordActivity.this,
+                                    ResetPasswordActivity.class);
 
+                            intent.putExtra(
+                                    "email",
+                                    dto.getEmail());
+
+                            startActivity(intent);
+
+                            finish();
                         } else {
 
                             Toast.makeText(
                                     ForgotPasswordActivity.this,
-                                    "Password Reset Failed",
+                                    "Failed to send OTP",
                                     Toast.LENGTH_SHORT
                             ).show();
                         }

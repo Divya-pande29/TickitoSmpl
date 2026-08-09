@@ -19,7 +19,7 @@ public interface BookingAPI
     @POST("tikito/booking/user")
     Call<JsonObject> bookTicket(@Body Ticket ticket);
 
-    @GET("tikito/booking/user/getMyBookings")
+    @GET("tikito/booking/user/getMyBooking")
     Call<JsonObject> getMyBookings();
 
     @PATCH("tikito/booking/user/cancel/{bookingId}")
