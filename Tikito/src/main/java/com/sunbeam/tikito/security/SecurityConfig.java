@@ -73,7 +73,7 @@ public class SecurityConfig
 								   .requestMatchers("/tikito/shows/admin/**").hasRole("ADMIN")
 								   .requestMatchers("/posters/**").permitAll()
 								   .requestMatchers("/profiles/**").permitAll()
-								   .requestMatchers("/tikito/upload/**").hasRole("USER")
+								   .requestMatchers("/tikito/upload/**").permitAll()
 								   .requestMatchers(HttpMethod.GET, "/tikito/foods/**").permitAll()
 								   .requestMatchers("/tikito/foods/admin/**").hasRole("ADMIN")
 								   //.requestMatchers("/tikito/payment/**").hasRole("USER")
