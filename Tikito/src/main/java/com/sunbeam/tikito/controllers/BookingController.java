@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sunbeam.tikito.dto.AllBookingsDto;
 import com.sunbeam.tikito.dto.AvailableSeatsDto;
+import com.sunbeam.tikito.dto.BookingHistoryDto;
 import com.sunbeam.tikito.dto.CancelTicketDto;
+import com.sunbeam.tikito.dto.CheckSeatDto;
 import com.sunbeam.tikito.dto.TicketBookedDto;
 import com.sunbeam.tikito.dto.TicketBookingDto;
 import com.sunbeam.tikito.dto.UserBookingDto;
@@ -56,12 +58,23 @@ public class BookingController
 		return Resp.success(userDetails);
 	}
 	
-	@GetMapping("/user/getMyBookings") //My tickets in ui //returns all booking of a user
+	@GetMapping("/user/getMyBooking") //My tickets in ui //returns all booking of a user
 	public Resp<?> getAllBookingsByUser( @AuthenticationPrincipal UserEntity loggedInUser)
 	{
 		List<UserBookingDto> userDetailsList = ser.getAllBookingsByUser(loggedInUser.getUserId());
 		return Resp.success(userDetailsList);
 	}
+	
+	@GetMapping("/user/getMyBookings")
+	public Resp<?> getAllBookingHistoryByUser(
+	        @AuthenticationPrincipal UserEntity loggedInUser)
+	{
+	    List<BookingHistoryDto> bookingHistory =
+	            ser.getBookingHistory(loggedInUser.getUserId());
+
+	    return Resp.success(bookingHistory);
+	}
+	
 	
 	@GetMapping("/admin/getByShowId/{showId}")
 	@PreAuthorize("hasRole('ADMIN')")
@@ -77,5 +90,15 @@ public class BookingController
 	{
 		List<AvailableSeatsDto> availableSeats = ser.getAllAvailableSeats(showId);
 		return Resp.success(availableSeats);
+	}
+	
+	@PostMapping("/user/checkAvailability")
+	public Resp<?> checkAvailability(
+	        @RequestBody CheckSeatDto dto)
+	{
+	    boolean available =
+	            ser.areSeatsAvailable(dto);
+
+	    return Resp.success(available);
 	}
 }

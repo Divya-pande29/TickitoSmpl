@@ -17,6 +17,18 @@
         android:theme="@style/Theme.Tikito"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activities.TicketActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BookingSummaryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FoodActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ResetPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ConfirmBookingActivity"
             android:exported="false" />
         <activity
@@ -40,8 +52,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".activities.RegisterActivity"
             android:exported="false" /> <!-- <activity -->
@@ -61,28 +72,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activities.ForgotPasswordActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".activities.ShowActivity"
             android:exported="false" />
         <activity
             android:name=".activities.EventActivity"
             android:exported="false" />
-       
-<!--        <activity-->
-<!--            android:name=".activities.MovieActivity"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".activities.StageShowActivity"-->
-<!--            android:exported="false" />-->
-<!--        <activity-->
-<!--            android:name=".activities.BookSeatActivity"-->
-<!--            android:exported="false" />-->
     </application>
 
 </manifest>

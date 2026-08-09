@@ -24,13 +24,16 @@ public interface UserAPI {
     @POST("tikito/user/register")
     Call<ApiResponse<UserDto>> register(@Body UserDto userDto);
 
-    @PUT("tikito/user/forgot-password")
-    Call<ApiResponse<String>> forgotPassword(@Body UserDto userDto);
+    @POST("tikito/user/forgot-password")
+    Call<ApiResponse<String>> forgotPassword(@Body UserDto dto);
 
     @GET("tikito/user/profile")
     Call<ApiResponse<UserDto>> getProfile();
 
     @PUT("tikito/user/password")
     Call<ApiResponse<String>> changePassword(@Body UserDto userDto);
+
+    @POST("tikito/user/reset-password")
+    Call<ApiResponse<String>> resetPassword(@Body UserDto dto);
 
 }

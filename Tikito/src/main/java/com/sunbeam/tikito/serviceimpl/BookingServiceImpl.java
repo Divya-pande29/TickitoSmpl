@@ -20,7 +20,9 @@ import com.sunbeam.tikito.daos.UserDao;
 import com.sunbeam.tikito.daos.VenueDao;
 import com.sunbeam.tikito.dto.AllBookingsDto;
 import com.sunbeam.tikito.dto.AvailableSeatsDto;
+import com.sunbeam.tikito.dto.BookingHistoryDto;
 import com.sunbeam.tikito.dto.CancelTicketDto;
+import com.sunbeam.tikito.dto.CheckSeatDto;
 import com.sunbeam.tikito.dto.TicketBookedDto;
 import com.sunbeam.tikito.dto.TicketBookingDto;
 import com.sunbeam.tikito.dto.UserBookingDto;
@@ -144,7 +146,17 @@ public class BookingServiceImpl implements BookingService
 					}
 					
 					//initialize ticket and return 
-					ticket = new TicketBookedDto(newBooking.getBookingId(), show.getShowId(), seatNums, totalAmt, PaymentStatus.PAID, BookingStatus.SUCCESS);
+					ticket = new TicketBookedDto(
+					        newBooking.getBookingId(),
+					        show.getShowId(),
+					        show.getEvent().getEventName(),
+					        show.getVenue().getName(),
+					        show.getShowDate(),
+					        show.getShowStartTime(),
+					        seatNums,
+					        totalAmt,
+					        PaymentStatus.PAID,
+					        BookingStatus.SUCCESS);
 				}
 				catch(DataIntegrityViolationException e)
 				{
@@ -311,12 +323,88 @@ public class BookingServiceImpl implements BookingService
 		                                  .filter(s -> !bookedSeatIds.contains(s.getSeatId())).toList();
 		
 		List<AvailableSeatsDto> dtos = new ArrayList<>();
-		for(SeatEntity s: availableSeats)
+		for(SeatEntity seat: availableSeats)
 		{
-			AvailableSeatsDto dto = new AvailableSeatsDto(s.getSeatId(), s.getSeatNo());
-			dtos.add(dto);
+			AvailableSeatsDto dto =
+	                new AvailableSeatsDto();
+
+	        dto.setSeatId(seat.getSeatId());
+
+	        dto.setSeatNo(seat.getSeatNo());
+
+	        dto.setBooked(
+	                bookedSeatIds.contains(
+	                        seat.getSeatId()));
+
+	        dtos.add(dto);
 		}
 		
 		return dtos;
+	}
+	
+	@Override
+	public List<BookingHistoryDto> getBookingHistory(long userId) {
+
+	    List<BookingEntity> bookings =
+	            bookingDao.findByUserUserId(userId);
+
+	    List<BookingHistoryDto> bookingHistory = new ArrayList<>();
+
+	    for (BookingEntity booking : bookings) {
+
+	        List<String> seatNumbers = new ArrayList<>();
+
+	        if (booking.getBookedSeats() != null) {
+	            for (BookedSeatsEntity bookedSeat : booking.getBookedSeats()) {
+	                seatNumbers.add(bookedSeat.getSeat().getSeatNo());
+	            }
+	        }
+
+	        BookingHistoryDto dto = new BookingHistoryDto();
+
+	        dto.setBookingId(booking.getBookingId());
+
+	        dto.setShowId(booking.getShow().getShowId());
+
+	        dto.setEventName(
+	                booking.getShow().getEvent().getEventName());
+
+	        dto.setVenueName(
+	                booking.getShow().getVenue().getName());
+
+	        dto.setShowDate(
+	                booking.getShow().getShowDate());
+
+	        dto.setShowStartTime(
+	                booking.getShow().getShowStartTime());
+
+	        dto.setSeatNumbers(seatNumbers);
+
+	        dto.setTotalAmt(booking.getTotalAmt());
+
+	        dto.setPaymentStatus(
+	                booking.getPaymentStatus());
+
+	        dto.setBookingStatus(
+	                booking.getBookingStatus());
+
+	        dto.setBookingDate(
+	                booking.getCreatedAt());
+
+	        bookingHistory.add(dto);
+	    }
+
+	    return bookingHistory;
+	}
+	
+	@Override
+	public boolean areSeatsAvailable(CheckSeatDto dto)
+	{
+	    List<BookedSeatsEntity> bookedSeats =
+	            bookedSeatDao.findByShowShowIdAndSeatSeatIdIn(
+	                    dto.getShowId(),
+	                    dto.getSeatIds());
+
+	    return bookedSeats.isEmpty();
 	}
 }

@@ -69,6 +69,10 @@ public class ShowActivity extends AppCompatActivity
         recyclerVenues.setLayoutManager(
                 new LinearLayoutManager(this));
 
+        eventId = getIntent().getLongExtra("eventId", 0);
+        eventName = getIntent().getStringExtra("eventName");
+        imageUrl = getIntent().getStringExtra("ImageUrl");
+
         dateAdapter = new ShowDateAdapter(
                 this,
                 dateList,
@@ -76,14 +80,15 @@ public class ShowActivity extends AppCompatActivity
 
         venueAdapter = new ShowAdapter(
                 this,
-                filteredVenues);
+                filteredVenues, eventName);
 
         recyclerDates.setAdapter(dateAdapter);
         recyclerVenues.setAdapter(venueAdapter);
 
-        eventId = getIntent().getLongExtra("eventId", 0);
-        eventName = getIntent().getStringExtra("eventName");
-        imageUrl = getIntent().getStringExtra("ImageUrl");
+//        vaishnavi - moved above to get to bookseatActivity
+//        eventId = getIntent().getLongExtra("eventId", 0);
+//        eventName = getIntent().getStringExtra("eventName");
+//        imageUrl = getIntent().getStringExtra("ImageUrl");
 
         txtEventName.setText(eventName);
 

@@ -60,4 +60,12 @@ dependencies {
     val room_version = "2.8.4"
     implementation("androidx.room:room-runtime:${room_version}")
     annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    //razorpay
+    implementation("com.razorpay:checkout:1.6.41")
+
+    //qr code
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("com.google.zxing:core:3.5.3")
+
 }

@@ -12,6 +12,8 @@ public interface UserService {
 	String forgotPassword(UserDto dto);
 	String deleteAccount(Long userId);
 	String updateProfileImage(Long userId, UserDto dto);
+	public String resetPassword(UserDto dto);
+	public String updateProfile(Long userId, UserDto dto);
 }	
 //	String forgotPassword(String email,String newPassword);
 
