@@ -8,8 +8,7 @@ import lombok.Data;
 @Data
 	public class ShowTimingDto {
 
-
-	  private Long showId;
+	    private Long showId;
 
 	    private LocalDate showDate;
 

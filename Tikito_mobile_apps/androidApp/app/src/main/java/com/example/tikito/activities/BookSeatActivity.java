@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.tikito.R;
 import com.example.tikito.adapters.SeatAdapter;
 import com.example.tikito.constants.AppConstants;
@@ -32,6 +34,7 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
     RecyclerView recyclerViewSeats;
     SeatAdapter seatAdapter;
     TextView txtNoOfSeats, txtSeatNos, txtMovieName, txtDate;
+    ImageView imgPoster;
     Button confirm;
     private long venueId;
     private long selectedShowId;
@@ -39,6 +42,7 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
     List<SeatItem> seats = new ArrayList<>();
     private double ticketPrice;
     Button btn;
+    private String imageUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -56,6 +60,7 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
         txtDate = findViewById(R.id.txtDate);
         recyclerViewSeats = findViewById(R.id.recyclerViewSeats);
         confirm = findViewById(R.id.confirmBtn);
+        imgPoster = findViewById(R.id.posterURL);
 
         //Adaptors for Seat
         seatAdapter = new SeatAdapter(this, seats, this);
@@ -67,14 +72,13 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
         //data from Intent
         String eventName = intent.getStringExtra("eventName");
-        String posterUrl = intent.getStringExtra("posterUrl");
         venueId = intent.getLongExtra("venueId",0);
         String venueName = intent.getStringExtra("venueName");
         String showDate = intent.getStringExtra("showDate");
         selectedShowId = intent.getLongExtra("showId", 0);
         String showStartTime = intent.getStringExtra("showTime");
         ticketPrice = getIntent().getDoubleExtra("price", 0);
-
+        imageUrl = getIntent().getStringExtra("ImageUrl");
 
         Log.d("BOOK", "Ticket Price = " + ticketPrice);
 
@@ -83,7 +87,9 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
         //set Data in txt Views
         txtDate.setText(showDate);
-
+        Glide.with(this)
+                .load(imageUrl)
+                .into(imgPoster);
 
 //        confirm.setOnClickListener(v ->
 //        {
@@ -125,12 +131,7 @@ public class BookSeatActivity extends AppCompatActivity implements SeatAdapter.O
 
         });
 
-//        btn = findViewById(R.id.tofood);
-//        btn.setOnClickListener(v ->
-//        {
-//            Intent intent2 = new Intent(this, FoodActivity.class);
-//            startActivity(intent2);
-//        });
+        
     }
 
     @Override
