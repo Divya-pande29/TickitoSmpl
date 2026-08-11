@@ -9,7 +9,7 @@ import lombok.Data;
 	public class ShowTimingDto {
 
 	    private Long showId;
-	    
+
 	    private LocalDate showDate;
 
 	    private LocalTime showStartTime;

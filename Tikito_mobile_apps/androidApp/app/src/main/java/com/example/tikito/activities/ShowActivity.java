@@ -80,7 +80,9 @@ public class ShowActivity extends AppCompatActivity
 
         venueAdapter = new ShowAdapter(
                 this,
-                filteredVenues, eventName);
+                filteredVenues,
+                eventName,
+                imageUrl);
 
         recyclerDates.setAdapter(dateAdapter);
         recyclerVenues.setAdapter(venueAdapter);
@@ -94,8 +96,6 @@ public class ShowActivity extends AppCompatActivity
 
         Glide.with(this)
                 .load(imageUrl)
-                .placeholder(R.drawable.sc)
-                .error(R.drawable.sc)
                 .into(imgPoster);
 
         loadShows();

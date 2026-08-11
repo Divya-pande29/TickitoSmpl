@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class API {
 
     private static API api;
-    public static final String URL = "http://172.18.4.72/";
+    public static final String URL = "http://192.168.1.101/";
     private final EventAPI eventAPI;
     private final VenueAPI venueAPI;
     private final ShowAPI showAPI;
