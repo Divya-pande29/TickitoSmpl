@@ -80,7 +80,9 @@ public class ShowActivity extends AppCompatActivity
 
         venueAdapter = new ShowAdapter(
                 this,
-                filteredVenues, eventName);
+                filteredVenues,
+                eventName,
+                imageUrl);
 
         recyclerDates.setAdapter(dateAdapter);
         recyclerVenues.setAdapter(venueAdapter);
