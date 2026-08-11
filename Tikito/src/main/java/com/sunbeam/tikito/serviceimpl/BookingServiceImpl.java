@@ -166,7 +166,7 @@ public class BookingServiceImpl implements BookingService
 		}
 		else
 		{
-			throw new InvalidShowException("The show has already, can't book now");
+			throw new InvalidShowException("The show has already started, can't book now");
 		}
 		
 		return ticket;
